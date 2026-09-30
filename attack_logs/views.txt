@@ -1,0 +1,41 @@
+from django.http import Http404
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import get_object_or_404, render
+from django.core.paginator import Paginator
+from .models import RequestLog
+from django.db.models import Q
+# Define the dictionary at module level
+
+
+@login_required
+def attack_logs(request):
+    logs = RequestLog.objects.all()
+
+    per_page = request.GET.get("per_page", 5)
+    paginator = Paginator(logs, per_page)
+
+    page_number = request.GET.get("page", 1)
+    page_obj = paginator.get_page(page_number)
+
+    return render(request, "attack_logs/index.html", {"page_obj": page_obj})
+
+
+@login_required
+def attack_log_detail(request, log_id):
+    log = get_object_or_404(RequestLog, id=log_id)
+    return render(request, "attack_logs/view.html", {"log": log})
+
+@login_required
+def search_attack_logs(request):
+    query = request.GET.get("q", "")
+    logs = RequestLog.objects.filter(Q(source_ip__icontains=query) |
+                                     Q(endpoint__icontains=query) |
+                                     Q(method__icontains=query))
+                        
+    per_page = request.GET.get("per_page", 5)
+    paginator = Paginator(logs, per_page)
+
+    page_number = request.GET.get("page", 1)
+    page_obj = paginator.get_page(page_number)
+
+    return render(request, "attack_logs/index.html", {"page_obj": page_obj, "query": query})

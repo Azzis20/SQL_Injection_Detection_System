@@ -1,0 +1,89 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign In &middot; SecureQuery</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/auth.css' %}">
+    <script src="{% static 'script/auth.js' %}" defer></script>
+    {% comment %} <img src="{% static 'images/securequery_logo.png' %}" alt="Logo"> {% endcomment %}
+
+</head>
+<body class="auth-page">
+
+    <div class="auth-shell">
+
+        <section class="auth-brand">
+            <div class="brand-mark">
+                <div class="brand-logo-placeholder" aria-hidden="true">
+                   
+                    <img src="{% static 'images/securequery_logo.png' %}" alt="SecureQuery logo"> 
+                    
+                </div>
+                <div class="brand-mark-text">
+                    <h1 class="brand-name">SecureQuery</h1>
+                    <p class="brand-tagline">SQLi Detection &amp; Prevention System</p>
+                    <p class="brand-subtitle">Automated Threat Neutralization &amp; Deep Syntax Firewall</p>
+                </div>
+            </div>
+
+            <hr class="brand-divider">
+
+            <h2 class="brand-headline">Real-Time SQL Injection Interception &amp; Gateway Defense</h2>
+            <p class="brand-description">
+                Mission-critical database boundary protection with algorithmic payload parsing,
+                zero-day syntax analysis, and sub-millisecond query sanitation.
+            </p>
+        </section>
+
+        <section class="auth-card-wrapper">
+            <div class="auth-card">
+                <h2 class="auth-card-title">Sign In to Terminal</h2>
+                <p class="auth-card-subtitle">
+                    Enter your authorized operator credentials to access the system.
+                </p>
+
+                {% if error %}
+                    <p class="form-error">{{ error }}</p>
+                {% endif %}
+
+                <form method="post" class="auth-form">
+                    {% csrf_token %}
+
+                    <div class="form-field">
+                        <label class="form-field-label" for="id_email">Email</label>
+                        <div class="form-field-control">
+                            <span class="form-field-icon">&#9679;</span>
+                            <input type="email" id="id_email" name="email" placeholder="sysadmin@guardlink.soc" required>
+                        </div>
+                    </div>
+
+                    <div class="form-field">
+                        <label class="form-field-label" for="id_password">Password</label>
+                        <div class="form-field-control">
+                            <span class="form-field-icon">&#128274;</span>
+                            <input type="password" id="id_password" name="password" placeholder="Enter your password" required>
+                            <button type="button" class="form-field-toggle" id="toggle-password" aria-label="Show password">&#128065;</button>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-block">
+                        Login <span class="btn-arrow">&rsaquo;</span>
+                    </button>
+                </form>
+
+                <div class="divider"><span>OR</span></div>
+
+                <button type="button" class="btn btn-secondary btn-block" id="login-as-admin">
+                    Login as Admin
+                </button>
+            </div>
+        </section>
+
+    </div>
+
+   
+
+</body>
+</html>

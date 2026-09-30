@@ -1,0 +1,130 @@
+{% extends "layout.html" %}
+{% load static %}
+
+{% block title %}
+    IP Management
+{% endblock %}
+
+{% block style %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/ip-management.css' %}">
+{% endblock %}
+
+{% block content %}
+
+    <div class="page-header">
+        <div class="page-header-text">
+            <h1 class="page-title">IP Management</h1>
+            <p class="page-subtitle">Manage network access controls and inspect request origins.</p>
+        </div>
+        <a href="{% url 'ip_management:block_ip' %}" class="btn btn-primary" id="add-rule-btn">
+            <span class="btn-icon">+</span>
+            Add IP to Blocklist
+        </a>
+    </div>
+
+    <form method="GET">
+        <div class="search-bar">
+            <i class="fas fa-magnifying-glass search-icon"></i>
+
+            <input
+                type="text"
+                class="search-input"
+                id="rule-search"
+                name="q"
+                value="{{ query }}"
+                placeholder="Search for IP address, or reason blocked..."
+            >
+        </div>
+    </form>
+
+
+
+    <div class="blocklist-panel">
+
+        <div class="blocklist-panel-header">
+            <h2 class="blocklist-panel-title">
+                <span class="blocklist-panel-title-icon">&#128737;</span>
+                Active Blocklist
+            </h2>
+            <div class="blocklist-panel-toolbar">
+                <button type="button" class="icon-btn" title="Filter">&#9776;</button>
+                <button type="button" class="icon-btn" title="Export">&#8595;</button>
+            </div>
+        </div>
+
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>IP Address</th>
+                    <th>Reason Blocked</th>
+                    <th>Date Added</th>
+                    <th>Attempts</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for entry in blocklist %}
+                <tr>
+                    <td class="cell-ip-address">{{ entry.ip_address }}</td>
+                    <td>
+                        <div class="reason-blocked">
+                            <span class="reason-blocked-dot severity-{{ entry.severity }}"></span>
+                            <span>{{ entry.reason }}</span>
+                        </div>
+                    </td>
+                    <td>{{ entry.date_added }}</td>
+                    <td class="cell-attempts">{{ entry.attempt_count }}</td>
+                    <td>
+                        <div class="actions-cell">
+                            <a href="{% url 'ip_management:view_blocked_ip' entry.id %}" class="action-link action-link-view">
+                                <span class="action-link-icon">&#128065;</span>
+                                View
+                            </a>
+                            {% comment %} <button type="button" class="action-link action-link-unblock" data-ip-id="{{ entry.id }}">
+                                <span class="action-link-icon">&#128274;</span>
+                                Unblock
+                            </button> {% endcomment %}
+                        </div>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5">No blocked IPs found.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <div class="pagination-bar">
+            <span class="pagination-summary">
+                Showing {{ page_obj.start_index }}-{{ page_obj.end_index }} of {{ paginator.count }} IP entries
+            </span>
+
+            <div class="page-controls">
+                {% if page_obj.has_previous %}
+                    <a href="?page={{ page_obj.previous_page_number }}" class="page-btn" title="Previous Page">&#8249;</a>
+                {% else %}
+                    <button type="button" class="page-btn" disabled>&#8249;</button>
+                {% endif %}
+
+                {% for num in paginator.page_range %}
+                    {% if page_obj.number == num %}
+                        <span class="page-btn active">{{ num }}</span>
+                    {% else %}
+                        <a href="?page={{ num }}" class="page-btn">{{ num }}</a>
+                    {% endif %}
+                {% endfor %}
+
+                {% if page_obj.has_next %}
+                    <a href="?page={{ page_obj.next_page_number }}" class="page-btn" title="Next Page">&#8250;</a>
+                {% else %}
+                    <button type="button" class="page-btn" disabled>&#8250;</button>
+                {% endif %}
+            </div>
+        </div>
+
+    </div>
+
+    
+
+{% endblock %}

@@ -1,0 +1,73 @@
+{% extends "layout.html" %}
+{% load static %}
+
+{% block title %}
+    Blocked IP Details
+{% endblock %}
+
+{% block style %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/ip-management.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="ip-mgmt-page">
+
+    <a href="{% url 'ip_management:index' %}" class="back-link">
+        <span class="back-arrow">&#8592;</span> Back to IP Management
+    </a>
+
+    <h1 class="page-title">Blocked IP Details</h1>
+    <p class="page-subtitle">Details for this network access restriction.</p>
+
+    <div class="block-card">
+
+        <div class="block-card-header">
+            <span class="block-card-icon">&#128737;</span>
+            <span class="block-card-title">Blocked IP Address</span>
+            <span class="block-card-tag">SECURITY RULE #MAN-BLK</span>
+        </div>
+
+        <div class="form-group">
+            <div class="form-label-row">
+                <label>IP ADDRESS</label>
+            </div>
+            <div class="input-with-icon">
+                <span class="input-icon">&#9737;</span>
+                <input type="text" value="{{ entry.ip_address }}" readonly>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="form-label-row">
+                <label>REASON FOR BLOCKING</label>
+            </div>
+            <textarea rows="4" readonly>{{ entry.reason }}</textarea>
+        </div>
+
+        <div class="form-group view-meta">
+            <div class="form-label-row"><label>ATTEMPT COUNT</label></div>
+            <p class="view-meta-value">{{ entry.attempt_count }}</p>
+        </div>
+
+        <div class="form-group view-meta">
+            <div class="form-label-row"><label>DATE ADDED</label></div>
+            <p class="view-meta-value">{{ entry.date_added }}</p>
+        </div>
+
+        <div class="form-group view-meta">
+            <div class="form-label-row"><label>STATUS</label></div>
+            <p class="view-meta-value">
+                {% if entry.is_active %}Active{% else %}Unblocked{% endif %}
+            </p>
+        </div>
+
+        <div class="form-footer">
+            <a href="{% url 'ip_management:index' %}" class="btn btn-secondary">Close</a>
+            <button type="button" class="btn btn-primary action-link-unblock" data-ip-id="{{ entry.id }}">
+                <span class="btn-icon">&#128274;</span> Unblock IP Address
+            </button>
+        </div>
+
+    </div>
+</div>
+{% endblock %}

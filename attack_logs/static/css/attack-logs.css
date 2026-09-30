@@ -1,0 +1,699 @@
+
+ /* attack-logs.css */
+/* ===========================================================
+   Forensic Request Analysis — component styling
+   Reuses design tokens (--color-*, --font-*) from base layout.
+   Assumes .page-header is already defined globally.
+   =========================================================== */
+
+/* ---------------------------------------------------------
+   Back link
+   --------------------------------------------------------- */
+
+ 
+
+   
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-text-secondary);
+  text-decoration: none;
+  margin-bottom: 16px;
+}
+
+.back-link:hover {
+  color: var(--color-text-primary);
+}
+
+/* ---------------------------------------------------------
+   Outer panel
+   --------------------------------------------------------- */
+
+.forensic-panel {
+  background-color: var(--color-bg-sidebar);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  padding: 24px;
+}
+
+.forensic-panel-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.forensic-panel-header-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  background-color: rgba(248, 113, 113, 0.12);
+  color: #f87171;
+  font-size: 14px;
+}
+
+.forensic-panel-title {
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--color-text-primary);
+  margin: 0;
+}
+
+/* Two-column layout: metadata / payload log */
+
+.forensic-grid {
+  display: grid;
+  grid-template-columns: 360px 1fr;
+  gap: 16px;
+}
+
+.forensic-col {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* ---------------------------------------------------------
+   Request Metadata card
+   --------------------------------------------------------- */
+
+.metadata-card {
+  background-color: var(--color-bg-main);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  padding: 18px 20px;
+}
+
+.metadata-card-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--color-text-primary);
+  margin-bottom: 16px;
+}
+
+.metadata-card-header-icon {
+  color: var(--color-accent);
+  font-size: 13px;
+}
+
+.metadata-field {
+  margin-bottom: 16px;
+}
+
+.metadata-field:last-child {
+  margin-bottom: 0;
+}
+
+.metadata-field-label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: var(--color-text-secondary);
+  margin-bottom: 6px;
+}
+
+.metadata-field-value {
+  font-size: 13px;
+  color: var(--color-text-primary);
+  word-break: break-word;
+}
+
+.metadata-field-value.is-link {
+  color: var(--color-accent);
+}
+
+.metadata-field-value.is-mono {
+  font-family: var(--font-mono);
+}
+
+/* Value shown as a pill (Source IP, HTTP Method) */
+
+.metadata-value-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 10px;
+  border-radius: 6px;
+  background-color: #171d2c;
+  border: 1px solid var(--color-border);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.metadata-locate-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 5px;
+  border: none;
+  background: none;
+  color: var(--color-accent);
+  cursor: pointer;
+}
+
+.metadata-locate-btn:hover {
+  background-color: rgba(255, 255, 255, 0.06);
+}
+
+/* ---------------------------------------------------------
+   Detection Breakdown card
+   --------------------------------------------------------- */
+
+.breakdown-card {
+  background-color: var(--color-bg-main);
+  border: 1px solid var(--color-border);
+  border-top: 2px solid #f87171;
+  border-radius: 8px;
+  padding: 18px 20px;
+}
+
+.breakdown-card-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--color-text-primary);
+  margin-bottom: 16px;
+}
+
+.breakdown-card-header-icon {
+  color: var(--color-accent);
+  font-size: 13px;
+}
+
+/* Risk score summary row */
+
+.risk-score-summary {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px;
+  background-color: #171d2c;
+  border-radius: 8px;
+  margin-bottom: 16px;
+}
+
+.risk-score-ring {
+  --score-percent: 60%;
+  position: relative;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  background: conic-gradient(#f87171 var(--score-percent), #232b3d 0);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.risk-score-ring::before {
+  content: "";
+  position: absolute;
+  inset: 4px;
+  border-radius: 50%;
+  background-color: #171d2c;
+}
+
+.risk-score-ring-value {
+  position: relative;
+  font-family: var(--font-mono);
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--color-text-primary);
+}
+
+.risk-score-label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: var(--color-text-secondary);
+  margin-bottom: 3px;
+}
+
+.risk-score-status {
+  font-size: 15px;
+  font-weight: 700;
+  color: #f87171;
+}
+
+/* Breakdown list */
+
+.breakdown-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.breakdown-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 4px;
+  border-top: 1px solid var(--color-border);
+  font-size: 13px;
+}
+
+.breakdown-item:first-child {
+  border-top: none;
+}
+
+.breakdown-item-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--color-text-primary);
+  font-weight: 600;
+}
+
+.breakdown-item-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: #f87171;
+  flex-shrink: 0;
+}
+
+.breakdown-item-score {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  color: #f87171;
+}
+
+/* ---------------------------------------------------------
+   Payload Analysis Log (terminal-style card)
+   --------------------------------------------------------- */
+
+.log-card {
+  background-color: var(--color-bg-main);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  overflow: hidden;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.log-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.log-card-filename {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  color: var(--color-text-secondary);
+}
+
+.log-card-filename-icon {
+  color: var(--color-accent);
+  font-size: 13px;
+}
+
+.log-card-dots {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.log-card-dots span {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: var(--color-border);
+}
+
+.log-card-body {
+  flex: 1;
+  padding: 18px 20px;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+.log-comment {
+  color: var(--color-text-secondary);
+}
+
+.log-line-label {
+  color: var(--color-text-secondary);
+  margin-top: 12px;
+}
+
+.log-payload {
+  display: block;
+  color: var(--color-accent);
+  font-weight: 600;
+  word-break: break-all;
+}
+
+/* ---------------------------------------------------------
+   Footer actions
+   --------------------------------------------------------- */
+
+.forensic-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 24px;
+}
+
+.btn-outline {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 9px 16px;
+  border-radius: 6px;
+  border: 1px solid var(--color-border);
+  background-color: transparent;
+  color: var(--color-text-primary);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btn-outline:hover {
+  background-color: rgba(255, 255, 255, 0.06);
+}
+
+.btn-danger {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 9px 16px;
+  border-radius: 6px;
+  border: 1px solid #ef4444;
+  background-color: #ef4444;
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btn-danger:hover {
+  filter: brightness(1.1);
+}
+
+/* ---------------------------------------------------------
+   Responsive
+   --------------------------------------------------------- */
+
+@media (max-width: 900px) {
+  .forensic-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .forensic-footer {
+    flex-direction: column-reverse;
+  }
+
+  .btn-outline,
+  .btn-danger {
+    justify-content: center;
+  }
+}
+
+/* ===========================================================
+   Attack Logs — List View additions
+   Append to attack-logs.css. Reuses --color-*, --font-* tokens.
+   =========================================================== */
+
+/* ---------------------------------------------------------
+   Filter bar
+   --------------------------------------------------------- */
+
+.filter-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.filter-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.filter-dropdown {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  border-radius: 6px;
+  border: 1px solid var(--color-border);
+  background-color: var(--color-bg-sidebar);
+  color: var(--color-text-secondary);
+  font-family: var(--font-ui);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.filter-dropdown:hover {
+  background-color: rgba(255, 255, 255, 0.04);
+  color: var(--color-text-primary);
+}
+
+.filter-dropdown i:first-child {
+  font-size: 12px;
+  color: var(--color-text-secondary);
+}
+
+.filter-dropdown .chevron {
+  font-size: 10px;
+  margin-left: 2px;
+  color: var(--color-text-secondary);
+}
+
+/* Blocked / Allowed toggle */
+
+.toggle-group {
+  display: inline-flex;
+  border-radius: 6px;
+  border: 1px solid var(--color-border);
+  background-color: var(--color-bg-sidebar);
+  overflow: hidden;
+}
+
+.toggle-option {
+  padding: 8px 16px;
+  border: none;
+  background-color: transparent;
+  color: var(--color-text-secondary);
+  font-family: var(--font-ui);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.toggle-option.active {
+  background-color: #232b3d;
+  color: var(--color-text-primary);
+}
+
+.toggle-option:not(.active):hover {
+  background-color: rgba(255, 255, 255, 0.03);
+}
+
+/* ---------------------------------------------------------
+   Search bar
+   --------------------------------------------------------- */
+
+.search-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  border-radius: 8px;
+  border: 1px solid var(--color-border);
+  background-color: var(--color-bg-sidebar);
+  margin-bottom: 16px;
+}
+
+.search-icon {
+  font-size: 13px;
+  color: var(--color-text-secondary);
+}
+
+.search-input {
+  flex: 1;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: var(--color-text-primary);
+  font-family: var(--font-ui);
+  font-size: 13px;
+}
+
+.search-input::placeholder {
+  color: var(--color-text-secondary);
+}
+
+/* ---------------------------------------------------------
+   Pagination bar (sits inside .table-wrapper, below .data-table)
+   --------------------------------------------------------- */
+
+.pagination-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px;
+  border-top: 1px solid var(--color-border);
+  font-size: 13px;
+  color: var(--color-text-secondary);
+}
+
+.entries-select {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.entries-select select {
+  padding: 4px 8px;
+  border-radius: 5px;
+  border: 1px solid var(--color-border);
+  background-color: var(--color-bg-main);
+  color: var(--color-text-primary);
+  font-family: var(--font-ui);
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.page-controls {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.page-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  border: 1px solid var(--color-border);
+  background-color: transparent;
+  color: var(--color-text-secondary);
+  font-size: 12px;
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.page-btn:hover:not(:disabled) {
+  background-color: rgba(255, 255, 255, 0.04);
+  color: var(--color-text-primary);
+}
+
+.page-btn.active {
+  background-color: var(--color-accent);
+  border-color: var(--color-accent);
+  color: #fff;
+}
+
+.page-btn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;  
+}
+
+.page-ellipsis {
+  padding: 0 2px;
+  color: var(--color-text-secondary);
+}
+
+/* ===========================================================
+   Attack Logs — functional filters (dropdown menus + toggle links)
+   =========================================================== */
+
+.dropdown {
+  position: relative;
+}
+
+.dropdown-menu {
+  display: none;
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  min-width: 100%;
+  z-index: 20;
+  padding: 4px;
+  border-radius: 8px;
+  border: 1px solid var(--color-border);
+  background-color: var(--color-bg-sidebar);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+}
+
+.dropdown.open .dropdown-menu {
+  display: block;
+}
+
+.dropdown .chevron {
+  transition: transform 0.15s ease;
+}
+
+.dropdown.open .chevron {
+  transform: rotate(180deg);
+}
+
+.dropdown.open .filter-dropdown {
+  color: var(--color-text-primary);
+}
+
+.dropdown-item {
+  display: block;
+  padding: 8px 12px;
+  border-radius: 5px;
+  color: var(--color-text-secondary);
+  font-family: var(--font-ui);
+  font-size: 13px;
+  font-weight: 500;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.dropdown-item:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+  color: var(--color-text-primary);
+}
+
+.dropdown-item.active {
+  background-color: #232b3d;
+  color: var(--color-text-primary);
+}
+
+/* Toggle options are now <a> tags instead of <button>s */
+a.toggle-option {
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
+}

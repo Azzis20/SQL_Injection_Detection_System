@@ -1,0 +1,237 @@
+/* =========================================================
+   Attack Logs — Page-specific Styles
+   Filter bar, search, pagination
+   Depends on variables + shared components in style.css
+   (buttons, .data-table, .badge, etc. now live there)
+   ========================================================= */
+
+/* ---------------------------------------------------------
+   Filter bar
+   --------------------------------------------------------- */
+
+.filter-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 16px;
+  background-color: var(--color-bg-sidebar);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  margin-bottom: 16px;
+}
+
+.filter-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.filter-dropdown {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: 6px;
+  border: 1px solid var(--color-border);
+  background-color: transparent;
+  color: var(--color-text-secondary);
+  font-family: var(--font-ui);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.filter-dropdown:hover {
+  color: var(--color-text-primary);
+  border-color: #2a3346;
+}
+
+.filter-dropdown .chevron {
+  font-size: 10px;
+  margin-left: 2px;
+  color: var(--color-text-secondary);
+}
+
+/* Segmented toggle (e.g. Blocked / Allowed) */
+.toggle-group {
+  display: inline-flex;
+  padding: 3px;
+  border-radius: 7px;
+  background-color: #0a0e17;
+  border: 1px solid var(--color-border);
+}
+
+.toggle-option {
+  padding: 6px 14px;
+  border: none;
+  border-radius: 5px;
+  background-color: transparent;
+  color: var(--color-text-secondary);
+  font-family: var(--font-ui);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.toggle-option.active {
+  background-color: #232b3d;
+  color: var(--color-text-primary);
+}
+
+/* ---------------------------------------------------------
+   Search bar
+   --------------------------------------------------------- */
+
+.search-bar {
+  position: relative;
+  margin-bottom: 16px;
+}
+
+.search-bar .search-icon {
+  position: absolute;
+  top: 50%;
+  left: 14px;
+  transform: translateY(-50%);
+  color: var(--color-text-secondary);
+  font-size: 13px;
+}
+
+.search-input {
+  width: 100%;
+  padding: 11px 14px 11px 38px;
+  border-radius: 8px;
+  border: 1px solid var(--color-border);
+  background-color: var(--color-bg-sidebar);
+  color: var(--color-text-primary);
+  font-family: var(--font-ui);
+  font-size: 13px;
+}
+
+.search-input::placeholder {
+  color: var(--color-text-secondary);
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: var(--color-accent);
+}
+
+/* ---------------------------------------------------------
+   Pagination
+   --------------------------------------------------------- */
+
+.pagination-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px;
+  border-top: 1px solid var(--color-border);
+  font-size: 13px;
+  color: var(--color-text-secondary);
+}
+
+.entries-select {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.entries-select select {
+  padding: 4px 8px;
+  border-radius: 5px;
+  border: 1px solid var(--color-border);
+  background-color: var(--color-bg-main);
+  color: var(--color-text-primary);
+  font-family: var(--font-ui);
+  font-size: 13px;
+}
+
+.page-controls {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.page-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 28px;
+  height: 28px;
+  padding: 0 6px;
+  border-radius: 6px;
+  border: none;
+  background-color: transparent;
+  color: var(--color-text-secondary);
+  font-family: var(--font-ui);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.page-btn:hover {
+  background-color: rgba(255, 255, 255, 0.06);
+  color: var(--color-text-primary);
+}
+
+.page-btn.active {
+  background-color: rgba(59, 130, 246, 0.15);
+  color: var(--color-accent);
+  font-weight: 600;
+}
+
+.page-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.page-ellipsis {
+  color: var(--color-text-secondary);
+  padding: 0 4px;
+}
+
+/* Base Badge Styling */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3px 10px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-radius: 12px;
+  border: 1px solid transparent;
+  line-height: 1.2;
+}
+
+/* Low Risk */
+.badge.low {
+  background-color: rgba(74, 222, 128, 0.12);
+  color: #4ade80;
+  border-color: rgba(74, 222, 128, 0.25);
+}
+
+/* Medium Risk */
+.badge.medium {
+  background-color: rgba(250, 204, 21, 0.12);
+  color: #facc15;
+  border-color: rgba(250, 204, 21, 0.25);
+}
+
+/* High Risk */
+.badge.high {
+  background-color: rgba(251, 146, 60, 0.12);
+  color: #fb923c;
+  border-color: rgba(251, 146, 60, 0.25);
+}
+
+/* Critical Risk */
+.badge.critical {
+  background-color: rgba(248, 113, 113, 0.15);
+  color: #f87171;
+  border-color: rgba(248, 113, 113, 0.3);
+}

@@ -1,0 +1,596 @@
+/* ===========================================================
+   IP Management — component styling
+   Reuses design tokens (--color-*, --font-*) and shared
+   .page-header / .search-bar / table classes from base layout.
+   =========================================================== */
+/* ---------------------------------------------------------
+   Primary button (Add New Rule / Save Rule)
+   --------------------------------------------------------- */
+
+.btn-primary {
+  background-color: var(--color-accent);
+  border-color: var(--color-accent);
+  color: #ffffff;
+}
+
+.btn-primary:hover {
+  filter: brightness(1.1);
+}
+
+.btn-text {
+  border-color: transparent;
+  background-color: transparent;
+  color: var(--color-text-secondary);
+}
+
+.btn-text:hover {
+  color: var(--color-text-primary);
+  background-color: transparent;
+}
+
+.btn-icon {
+  font-weight: 600;
+}
+
+.btn-arrow {
+  font-size: 15px;
+  line-height: 1;
+}
+/* ---------------------------------------------------------
+   Panel wrapper (Active Blocklist card)
+   --------------------------------------------------------- */
+
+.blocklist-panel {
+  margin-top: 24px;
+  background-color: var(--color-bg-sidebar);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.blocklist-panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.blocklist-panel-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--color-text-primary);
+  margin: 0;
+}
+
+.blocklist-panel-title-icon {
+  color: var(--color-accent);
+  font-size: 15px;
+  line-height: 1;
+}
+
+.blocklist-panel-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  border: none;
+  background-color: transparent;
+  color: var(--color-text-secondary);
+  cursor: pointer;
+}
+
+.icon-btn:hover {
+  background-color: rgba(255, 255, 255, 0.06);
+  color: var(--color-text-primary);
+}
+
+/* ---------------------------------------------------------
+   Table cells specific to IP Management
+   --------------------------------------------------------- */
+
+.cell-ip-address {
+  font-family: var(--font-mono);
+  font-weight: 600;
+  color: var(--color-accent);
+}
+
+/* Reason blocked: severity dot + text */
+
+.reason-blocked {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--color-text-secondary);
+}
+
+.reason-blocked-dot {
+  flex-shrink: 0;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+}
+
+.reason-blocked-dot.severity-critical { background-color: #f87171; }
+.reason-blocked-dot.severity-high     { background-color: #fb923c; }
+.reason-blocked-dot.severity-neutral  { background-color: var(--color-text-secondary); }
+
+/* Attempts count */
+
+.cell-attempts {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  color: var(--color-text-primary);
+  text-align: right;
+}
+
+/* Row action links (View / Unblock) */
+
+.actions-cell {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.action-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  border: none;
+  background: none;
+  padding: 0;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.action-link-view {
+  color: var(--color-accent);
+}
+
+.action-link-view:hover {
+  filter: brightness(1.15);
+}
+
+.action-link-unblock {
+  color: var(--color-text-secondary);
+}
+
+.action-link-unblock:hover {
+  color: var(--color-text-primary);
+}
+
+.action-link-icon {
+  font-size: 13px;
+  line-height: 1;
+}
+
+/* ---------------------------------------------------------
+   Panel footer (pagination)
+   --------------------------------------------------------- */
+
+.blocklist-panel-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 20px;
+  border-top: 1px solid var(--color-border);
+}
+
+.pagination-summary {
+  font-size: 13px;
+  color: var(--color-text-secondary);
+}
+
+.pagination-controls {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* ---------------------------------------------------------
+   Responsive
+   --------------------------------------------------------- */
+
+@media (max-width: 900px) {
+  .blocklist-panel-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .actions-cell {
+    gap: 10px;
+  }
+}
+
+/* ---------------------------------------------------------
+   Search bar
+   --------------------------------------------------------- */
+
+.search-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  border-radius: 8px;
+  border: 1px solid var(--color-border);
+  background-color: var(--color-bg-sidebar);
+  margin-bottom: 16px;
+}
+
+.search-icon {
+  font-size: 13px;
+  color: var(--color-text-secondary);
+}
+
+.search-input {
+  flex: 1;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: var(--color-text-primary);
+  font-family: var(--font-ui);
+  font-size: 13px;
+}
+
+.search-input::placeholder {
+  color: var(--color-text-secondary);
+}
+
+/* ---------------------------------------------------------
+   Pagination bar (sits inside .table-wrapper, below .data-table)
+   --------------------------------------------------------- */
+
+.pagination-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px;
+  border-top: 1px solid var(--color-border);
+  font-size: 13px;
+  color: var(--color-text-secondary);
+}
+
+.entries-select {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.entries-select select {
+  padding: 4px 8px;
+  border-radius: 5px;
+  border: 1px solid var(--color-border);
+  background-color: var(--color-bg-main);
+  color: var(--color-text-primary);
+  font-family: var(--font-ui);
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.page-controls {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.page-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  border: 1px solid var(--color-border);
+  background-color: transparent;
+  color: var(--color-text-secondary);
+  font-size: 12px;
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.page-btn:hover:not(:disabled) {
+  background-color: rgba(255, 255, 255, 0.04);
+  color: var(--color-text-primary);
+}
+
+.page-btn.active {
+  background-color: var(--color-accent);
+  border-color: var(--color-accent);
+  color: #fff;
+}
+
+.page-btn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;  
+}
+
+.page-ellipsis {
+  padding: 0 2px;
+  color: var(--color-text-secondary);
+}
+
+
+/* add_blocklist.html css styling */
+
+/* ===== Add IP to Blocklist page ===== */
+
+.ip-mgmt-page {
+    padding: 32px 40px;
+}
+
+.back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: #9aa4b2;
+    font-size: 14px;
+    text-decoration: none;
+    margin-bottom: 24px;
+}
+
+.back-link:hover {
+    color: #e6e9ee;
+}
+
+.back-arrow {
+    font-size: 16px;
+}
+
+.page-title {
+    color: #ffffff;
+    font-size: 32px;
+    font-weight: 700;
+    margin: 0 0 8px 0;
+}
+
+.page-subtitle {
+    color: #9aa4b2;
+    font-size: 15px;
+    margin: 0 0 28px 0;
+}
+
+.block-card {
+    background: #10141c;
+    border: 1px solid #232a36;
+    border-radius: 10px;
+    padding: 0 0 24px 0;
+    max-width: 980px;
+}
+
+.block-card-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 20px 28px;
+    border-bottom: 1px solid #232a36;
+}
+
+.block-card-icon {
+    color: #3b9eff;
+    font-size: 18px;
+}
+
+.block-card-title {
+    color: #ffffff;
+    font-weight: 600;
+    font-size: 16px;
+    flex: 1;
+}
+
+.block-card-tag {
+    color: #5f6b7a;
+    font-size: 12px;
+    letter-spacing: 0.5px;
+}
+
+.form-group {
+    padding: 24px 28px 0 28px;
+}
+
+.form-label-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 10px;
+}
+
+.form-label-row label {
+    color: #ffffff;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+}
+
+.required {
+    color: #3b9eff;
+}
+
+.form-label-hint-right {
+    color: #5f6b7a;
+    font-size: 12px;
+}
+
+.input-with-icon {
+    position: relative;
+}
+
+.input-with-icon .input-icon {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #5f6b7a;
+    font-size: 14px;
+}
+
+.ip-mgmt-page input[type="text"],
+.ip-mgmt-page textarea {
+    width: 100%;
+    background: #0b0e14;
+    border: 1px solid #232a36;
+    border-radius: 8px;
+    color: #e6e9ee;
+    font-size: 14px;
+    padding: 12px 14px 12px 38px;
+    box-sizing: border-box;
+    font-family: monospace;
+}
+
+.ip-mgmt-page textarea {
+    padding-left: 14px;
+    resize: vertical;
+    min-height: 110px;
+    font-family: inherit;
+}
+
+.ip-mgmt-page input[type="text"]:focus,
+.ip-mgmt-page textarea:focus {
+    outline: none;
+    border-color: #3b9eff;
+}
+
+.field-hint {
+    color: #5f6b7a;
+    font-size: 12px;
+    margin: 8px 0 0 0;
+}
+
+.field-hint.hint-error {
+    color: #ff6b6b;
+}
+
+.warning-box {
+    display: flex;
+    gap: 12px;
+    margin: 28px 28px 0 28px;
+    padding: 18px 20px;
+    background: rgba(234, 179, 8, 0.06);
+    border: 1px solid rgba(234, 179, 8, 0.35);
+    border-radius: 8px;
+}
+
+.warning-icon {
+    color: #eab308;
+    font-size: 16px;
+}
+
+.warning-title {
+    color: #eab308;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    margin: 0 0 8px 0;
+}
+
+.warning-text {
+    color: #c7cdd6;
+    font-size: 14px;
+    line-height: 1.5;
+    margin: 0;
+}
+
+.warning-divider {
+    border: none;
+    border-top: 1px solid rgba(234, 179, 8, 0.2);
+    margin: 14px 0;
+}
+
+.confirm-checkbox-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #e6e9ee;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.confirm-checkbox-row input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    accent-color: #3b9eff;
+    cursor: pointer;
+}
+
+.form-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 14px;
+    margin-top: 28px;
+    padding: 20px 28px 0 28px;
+    border-top: 1px solid #232a36;
+}
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 18px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    border: 1px solid transparent;
+    text-decoration: none;
+}
+
+.btn-secondary {
+    background: transparent;
+    color: #c7cdd6;
+    border-color: #232a36;
+}
+
+.btn-secondary:hover {
+    background: #161b26;
+}
+
+.btn-primary {
+    background: #2f7fe0;
+    color: #ffffff;
+}
+
+.btn-primary:hover:not(:disabled) {
+    background: #2a6fc4;
+}
+
+.btn-primary:disabled,
+.btn-primary.btn-disabled {
+    background: #2a3242;
+    color: #6b7280;
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+
+.btn-icon {
+    font-size: 14px;
+}
+
+
+/* addtional */
+.ip-mgmt-page input[readonly],
+.ip-mgmt-page textarea[readonly] {
+    background: #0b0e14;
+    color: #9aa4b2;
+    cursor: default;
+    border-color: #1a2028;
+}
+
+.view-meta-value {
+    color: #e6e9ee;
+    font-size: 14px;
+    margin: 0;
+    padding: 10px 0;
+}

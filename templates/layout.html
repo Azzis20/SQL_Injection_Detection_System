@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+        {% block title %}
+        
+        {% endblock %}
+    </title>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
+        {% block style %}
+        
+        {% endblock %}
+    <script src="{% static 'js/script.js' %}" defer></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+</head>
+<body>
+
+    <nav class="sidebar">
+
+        <ul class="sidebar-menu">
+            <li class="sidebar-brand">
+                <span class="brand-logo">
+                    <i class="fas fa-shield-alt"></i>
+                </span>
+                <span class="brand-text">
+                    <span class="brand-name">SecureQuery</span>
+                    <span class="brand-subtitle">
+                        SQL Injection Detection &amp; Prevention System
+                    </span>
+                </span>
+            </li>
+
+            <li class="sidebar-item">
+
+                <a class="sidebar-link {% if request.resolver_match.namespace == 'dashboard' %}active{% endif %}"
+                    href="{% url 'dashboard:index' %}">
+                    <i class="fas fa-gauge-high sidebar-icon"></i>
+                    <span>Dashboard</span>
+                </a>
+
+            </li>
+
+            <li class="sidebar-item">
+                <a class="sidebar-link {% if request.resolver_match.namespace == 'attack_logs' %}active{% endif %}"
+                href="{% url 'attack_logs:index' %}">
+                    <i class="fas fa-list-ul sidebar-icon"></i>
+                    <span>Attack Logs</span>
+                </a>
+            </li>
+
+            <li class="sidebar-item">
+                <a class="sidebar-link {% if request.resolver_match.namespace == 'detection_rule' %}active{% endif %}" href="{% url 'detection_rule:index' %}">
+                    <i class="fas fa-shield-halved sidebar-icon"></i>
+                    <span>Detection Rules</span>
+                </a>
+            </li>
+
+            <li class="sidebar-item">
+                <a class="sidebar-link {% if request.resolver_match.namespace == 'stats' %}active{% endif %}" href="{% url 'stats:index' %}">
+                    <i class="fas fa-chart-column sidebar-icon"></i>
+                    <span>Statistics</span>
+                </a>
+            </li>
+
+            <li class="sidebar-item">
+                <a class="sidebar-link {% if  request.resolver_match.namespace == 'ip_management' %}active{% endif %}" href="{% url 'ip_management:index' %}">
+                    <i class="fas fa-network-wired sidebar-icon"></i>
+                    <span>IP Management</span>
+                </a>
+            </li>
+
+            {% comment %} <li class="sidebar-item">
+                <a class="sidebar-link {% if request.path == '/alerts' %}active{% endif %}" href="/alerts">
+                    <i class="fas fa-bell sidebar-icon"></i>
+                    <span>Alerts</span>
+                </a>
+            </li> {% endcomment %}
+
+            <li class="sidebar-item">
+                <a class="sidebar-link {% if request.resolver_match.namespace == 'settings' %}active{% endif %}" href="{% url 'settings:index' %}">
+                    <i class="fas fa-gear sidebar-icon"></i>
+                    <span>Settings</span>
+                </a>
+            </li>
+        </ul>
+
+        <div class="sidebar-item sidebar-footer">
+            <button type="button" class="sidebar-link sidebar-logout" id="logout-trigger">
+                <i class="fas fa-right-from-bracket sidebar-icon"></i>
+                <span>Logout</span>
+            </button>
+        </div>
+                
+        
+
+    </nav>
+
+    <main>
+        {% block content %}
+            <!-- Headers -->
+            <!-- Page Content -->
+        {% endblock %}
+
+        <!-- Logout confirmation modal -->
+        <div class="modal-overlay" id="logout-modal-overlay">
+            <div class="modal-box" role="dialog" aria-modal="true" aria-labelledby="logout-modal-title">
+                <div class="modal-icon">
+                    <i class="fas fa-right-from-bracket"></i>
+                </div>
+                <h2 class="modal-title" id="logout-modal-title">Log out?</h2>
+                <p class="modal-text">You'll need to sign back in to access SecureQuery.</p>
+
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-secondary" id="logout-cancel">Cancel</button>
+                    <form method="post" action="{% url 'accounts:logout' %}" id="logout-form">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger">Log out</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </main>
+
+   
+
+</body>
+</html>

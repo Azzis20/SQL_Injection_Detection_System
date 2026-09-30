@@ -1,0 +1,161 @@
+{% extends "layout.html" %}
+{% load static %}
+
+{% block title %}
+    Detection Rule
+{% endblock %}
+
+{% block style %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/detection-rule.css' %}">
+{% endblock %}
+
+
+{% block content %}
+
+    <div class="page-header">
+        <div class="page-header-text">
+            <h1 class="page-title">Detection Rules</h1>
+            <p class="page-subtitle">Manage and test SQL injection detection patterns</p>
+        </div>
+        <button type="button" class="btn btn-primary" id="add-rule-btn">
+            <span class="btn-icon">+</span>
+            Add New Rule
+        </button>
+    </div>
+
+    <div class="search-bar">
+        <i class="fas fa-magnifying-glass search-icon"></i>
+        <input type="text" class="search-input" id="rule-search" placeholder="Search rules, patterns, or risk levels...">
+    </div>
+
+    <div class="table-wrapper">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Rule Name</th>
+                    <th>Type</th>
+                    <th>Risk Weight</th>
+                    <th>Status</th>
+                    <th>Last Modified</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for rule in rules %}
+                <tr>
+                    <td class="rule-name">{{ rule.name }}</td>
+                    <td>
+                        <span class="type-badge {{ rule.rule_type|lower }}">
+                            <span class="dot"></span> {{ rule.rule_type }}
+                        </span>
+                    </td>
+                    <td>
+                        <div class="risk-weight-container">
+                            <span class="risk-value">{{ rule.risk_weight }}</span>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: {{ rule.risk_weight }}%;"></div>
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <label class="toggle-switch">
+                            <input type="checkbox" {% if rule.is_enabled %}checked{% endif %}>
+                            <span class="slider"></span>
+                        </label>
+                    </td>
+                    <td class="cell-muted">{{ rule.last_modified }}</td>
+                    <td class="actions-cell">
+                        <button class="btn-icon"><i class="fas fa-pen"></i></button>
+                        <button class="btn-icon"><i class="fas fa-trash"></i></button>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="6" style="text-align: center; padding: 24px;">No detection rules found.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="panel-grid">
+
+        <section class="panel">
+            <div class="panel-header">
+                <span class="panel-icon">&#9879;</span>
+                <div>
+                    <h2 class="panel-title">Rule Sandbox</h2>
+                    <p class="panel-subtitle">Paste a sample payload to test against the active rule set.</p>
+                </div>
+            </div>
+
+            <textarea class="form-textarea" id="sandbox-payload" rows="4" placeholder="e.g. admin' OR 1=1--"></textarea>
+
+            <div class="panel-row">
+                <label class="checkbox-label">
+                    <input type="checkbox" class="checkbox" id="test-all-rules" checked>
+                    Test against all rules
+                </label>
+                <button type="button" class="btn btn-secondary" id="test-payload-btn">
+                    Test Payload <span class="btn-arrow">&rsaquo;</span>
+                </button>
+            </div>
+
+            <div class="result-box" id="sandbox-result" hidden>
+                <div class="result-header">
+                    <span class="result-icon">&#9888;</span>
+                    <div>
+                        <p class="result-title">Match Found: <span id="result-rule-name">Classic Signature</span></p>
+                        <p class="result-pattern">Matched pattern: <code id="result-pattern">UNION.*SELECT</code></p>
+                    </div>
+                </div>
+                <div class="result-tags">
+                    <span class="result-score" id="result-score">Risk Score: +90</span>
+                    <span class="result-action" id="result-action">Action: BLOCK</span>
+                </div>
+            </div>
+        </section>
+
+        <section class="panel">
+            <div class="panel-header">
+                <div>
+                    <h2 class="panel-title">Quick Add Rule</h2>
+                </div>
+            </div>
+
+            <form id="quick-add-form">
+                <div class="form-group">
+                    <label class="form-label" for="rule-name">Rule Name</label>
+                    <input type="text" class="form-input" id="rule-name" name="rule_name" placeholder="Descriptive name">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="rule-pattern">Pattern (Regex)</label>
+                    <textarea class="form-textarea" id="rule-pattern" name="pattern" rows="3" placeholder="^.*(?i)(select|union|drop).*$"></textarea>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label" for="rule-category">Category</label>
+                        <select class="form-input form-select" id="rule-category" name="category">
+                            <option value="signature">Signature</option>
+                            <option value="anomaly">Anomaly</option>
+                            <option value="keyword">Keyword</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="rule-weight">Risk Weight</label>
+                        <input type="number" class="form-input" id="rule-weight" name="risk_weight" min="0" max="100" value="50">
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" class="btn btn-text" id="cancel-add-rule">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save Rule</button>
+                </div>
+            </form>
+        </section>
+
+    </div>
+
+{% endblock %}

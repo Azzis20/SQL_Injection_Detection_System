@@ -1,0 +1,139 @@
+{% extends "layout.html" %}
+{% load static %}
+
+{% block title %}
+    Attack Logs - View
+{% endblock %}
+
+{% block style %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/attack-logs.css' %}">
+{% endblock %}
+
+{% block content %}
+
+    <div class="page-header">
+        <div class="page-header-text">
+            <h1 class="page-title">Attack Logs</h1>
+            <p class="page-subtitle">Real-time threat detection and mitigation history.</p>
+        </div>
+    </div>
+
+    <a href="{% url 'attack_logs:index' %}" class="back-link">
+        <span>&#8592;</span>
+        Back to Attack Logs
+    </a>
+
+    <div class="forensic-panel">
+
+        <div class="forensic-panel-header">
+            <span class="forensic-panel-header-icon">&#9888;</span>
+            <h2 class="forensic-panel-title">Forensic Request Analysis</h2>
+        </div>
+
+        <div class="forensic-grid">
+
+            <div class="forensic-col">
+
+                <div class="metadata-card">
+                    <div class="metadata-card-header">
+                        <span class="metadata-card-header-icon">&#128196;</span>
+                        Request Metadata
+                    </div>
+
+                    <div class="metadata-field">
+                        <div class="metadata-field-label">Timestamp</div>
+                        <div class="metadata-field-value">{{ log.timestamp }}</div>
+                    </div>
+
+                    <div class="metadata-field">
+                        <div class="metadata-field-label">Source IP</div>
+                        <div class="metadata-field-value">
+                            <span class="metadata-value-pill">
+                                {{ log.source_ip }}
+                                <button type="button" class="metadata-locate-btn" title="Locate IP">&#128205;</button>
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="metadata-field">
+                        <div class="metadata-field-label">Endpoint</div>
+                        <div class="metadata-field-value is-link is-mono">{{ log.endpoint }}</div>
+                    </div>
+
+                    <div class="metadata-field">
+                        <div class="metadata-field-label">HTTP Method</div>
+                        <div class="metadata-field-value">
+                            <span class="metadata-value-pill">{{ log.http_method }}</span>
+                        </div>
+                    </div>
+
+                    <div class="metadata-field">
+                        <div class="metadata-field-label">User-Agent</div>
+                        <div class="metadata-field-value">{{ log.user_agent }}</div>
+                    </div>
+                </div>
+
+                <div class="breakdown-card">
+                    <div class="breakdown-card-header">
+                        <span class="breakdown-card-header-icon">&#127919;</span>
+                        Detection Breakdown
+                    </div>
+
+                    <div class="risk-score-summary">
+                        <div class="risk-score-ring" style="--score-percent: {{ log.risk_score }}%;">
+                            <span class="risk-score-ring-value">{{ log.risk_score }}</span>
+                        </div>
+                        <div>
+                            <div class="risk-score-label">Total Risk Score</div>
+                            <div class="risk-score-status">{{ log.risk_status }}</div>
+                        </div>
+                    </div>
+
+                    <div class="breakdown-list">
+                        {% for match in log.detection_matches %}
+                        <div class="breakdown-item">
+                            <div class="breakdown-item-label">
+                                <span class="breakdown-item-dot"></span>
+                                {{ match.rule_name }}
+                            </div>
+                            <div class="breakdown-item-score">+{{ match.score }}</div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="log-card">
+                <div class="log-card-header">
+                    <div class="log-card-filename">
+                        <span class="log-card-filename-icon">&#128196;</span>
+                        PAYLOAD_ANALYSIS.LOG
+                    </div>
+                    <div class="log-card-dots">
+                        <span></span><span></span><span></span>
+                    </div>
+                </div>
+                <div class="log-card-body">
+                    <div class="log-comment"># Threat Context: {{ log.threat_context }}</div>
+                    <div class="log-line-label">Raw Payload String:</div>
+                    <code class="log-payload">"{{ log.raw_payload }}"</code>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="forensic-footer">
+            <button type="button" class="btn-outline" id="mark-false-positive-btn">
+                <span>&#10003;</span>
+                Mark as False Positive
+            </button>
+            <button type="button" class="btn-danger" id="add-ip-blocklist-btn">
+                <span>&#128683;</span>
+                Add IP to Blocklist
+            </button>
+        </div>
+
+    </div>
+
+{% endblock %}

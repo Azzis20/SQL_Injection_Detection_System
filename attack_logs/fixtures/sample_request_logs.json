@@ -1,0 +1,107 @@
+[
+  {
+    "model": "attack_logs.requestlog",
+    "pk": 1,
+    "fields": {
+      "timestamp": "2026-05-20T14:32:10Z",
+      "source_ip": "192.168.1.45",
+      "endpoint": "/api/v1/login",
+      "method": "POST",
+      "user_agent": "",
+      "query_params": null,
+      "request_body": null,
+      "headers": null,
+      "cookies": null,
+      "payload_snippet": "",
+      "risk_score": 98,
+      "risk_level": "critical",
+      "action_taken": "blocked",
+      "is_false_positive": false,
+      "reviewed_by": null
+    }
+  },
+  {
+    "model": "attack_logs.requestlog",
+    "pk": 2,
+    "fields": {
+      "timestamp": "2026-05-20T14:31:05Z",
+      "source_ip": "45.22.19.102",
+      "endpoint": "/admin/config.php",
+      "method": "GET",
+      "user_agent": "",
+      "query_params": null,
+      "request_body": null,
+      "headers": null,
+      "cookies": null,
+      "payload_snippet": "",
+      "risk_score": 85,
+      "risk_level": "high",
+      "action_taken": "blocked",
+      "is_false_positive": false,
+      "reviewed_by": null
+    }
+  },
+  {
+    "model": "attack_logs.requestlog",
+    "pk": 3,
+    "fields": {
+      "timestamp": "2026-05-20T14:28:44Z",
+      "source_ip": "10.0.5.21",
+      "endpoint": "/api/v1/users/scan",
+      "method": "OPTIONS",
+      "user_agent": "",
+      "query_params": null,
+      "request_body": null,
+      "headers": null,
+      "cookies": null,
+      "payload_snippet": "",
+      "risk_score": 62,
+      "risk_level": "medium",
+      "action_taken": "allowed",
+      "is_false_positive": false,
+      "reviewed_by": null
+    }
+  },
+  {
+    "model": "attack_logs.requestlog",
+    "pk": 4,
+    "fields": {
+      "timestamp": "2026-05-20T14:25:12Z",
+      "source_ip": "192.168.1.100",
+      "endpoint": "/assets/main.js",
+      "method": "GET",
+      "user_agent": "",
+      "query_params": null,
+      "request_body": null,
+      "headers": null,
+      "cookies": null,
+      "payload_snippet": "",
+      "risk_score": 12,
+      "risk_level": "low",
+      "action_taken": "allowed",
+      "is_false_positive": false,
+      "reviewed_by": null
+    }
+  },
+  {
+    "model": "attack_logs.requestlog",
+    "pk": 5,
+    "fields": {
+      "timestamp": "2026-05-20T14:20:01Z",
+      "source_ip": "8.8.8.8",
+      "endpoint": "/wp-login.php",
+      "method": "POST",
+      "user_agent": "",
+      "query_params": null,
+      "request_body": null,
+      "headers": null,
+      "cookies": null,
+      "payload_snippet": "",
+      "risk_score": 88,
+      "risk_level": "high",
+      "action_taken": "blocked",
+      "is_false_positive": false,
+      "reviewed_by": null
+    }
+  }
+]

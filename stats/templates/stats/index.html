@@ -1,0 +1,117 @@
+{% extends "layout.html" %}
+{% load static %}
+
+
+{% block title %}
+    Statistics
+{% endblock %}
+
+{% block style %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/stats.css' %}">
+{% endblock %}
+
+{% block content %}
+
+    <div class="page-header">
+        <div class="page-header-text">
+            <h1 class="page-title">Analytics Overview</h1>
+        </div>
+
+        {% comment %} <div class="time-range">
+            <span class="time-range-label">Time Range:</span>
+            <div class="toggle-group">
+                <button type="button" class="toggle-option {% if time_range == '7d' %}active{% endif %}" data-range="7d">7 Days</button>
+                <button type="button" class="toggle-option {% if time_range == '30d' %}active{% endif %}" data-range="30d">30 Days</button>
+            </div>
+            <button type="button" class="btn-link" id="custom-range-btn">Custom</button>
+        </div> {% endcomment %}
+    </div>
+
+    {% comment %} Attack Over Time Panel Graph {% endcomment %}
+    <section class="panel">
+        <div class="panel-row-header">
+            <span class="panel-eyebrow">Attacks Over Time</span>
+            <span class="panel-delta {% if attacks_trend_pct >= 0 %}is-up{% else %}is-down{% endif %}">
+                {% if attacks_trend_pct >= 0 %}+{% endif %}{{ attacks_trend_pct }}% vs previous period
+            </span>
+        </div>
+
+        <div class="chart-placeholder">
+            <canvas id="attacks-over-time-chart" data-series="{{ attacks_over_time|default:'[]' }}"></canvas>
+            <div class="chart-placeholder-empty" id="attacks-chart-empty">
+                <span class="chart-placeholder-icon">&#8599;</span>
+                Interactive Line Chart Visualization Area
+            </div>
+        </div>
+    </section>
+
+    {% comment %} Attack Types Breakdown Panel {% endcomment %}
+    <section class="panel">
+        <span class="panel-eyebrow">Attack Types Breakdown</span>
+
+        <div class="breakdown-list">
+            {% for type in attack_types %}
+            <div class="breakdown-item">
+                <div class="breakdown-item-row">
+                    <span class="breakdown-label">{{ type.name }}</span>
+                    <span class="breakdown-value breakdown-{{ type.severity }}">{{ type.percent }}%</span>
+                </div>
+                <div class="breakdown-bar">
+                    <div class="breakdown-bar-fill breakdown-{{ type.severity }}" style="width: {{ type.percent }}%;"></div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+
+    <div class="stats-grid">
+
+        {% comment %} Top Attacking IPS Panel {% endcomment %}
+        <section class="panel rank-panel rank-panel--danger">
+            <span class="panel-eyebrow">
+                <span class="panel-eyebrow-icon">&#9888;</span>
+                Top Attacking IPs
+            </span>
+
+            <div class="rank-list">
+                <div class="rank-list-header">
+                    <span>Rank</span>
+                    <span>Source IP</span>
+                    <span class="rank-align-right">Attempts</span>
+                </div>
+                {% for ip in top_attacking_ips %}
+                <div class="rank-row">
+                    <span class="rank {% if forloop.counter <= 2 %}is-top{% endif %}">#{{ forloop.counter }}</span>
+                    <span class="rank-label cell-mono">{{ ip.address }}</span>
+                    <span class="rank-value">{{ ip.attempts }}</span>
+                </div>
+                {% endfor %}
+            </div>
+        </section>
+
+        {% comment %} Most targeted endpoints Panel {% endcomment %}
+        <section class="panel rank-panel rank-panel--info">
+            <span class="panel-eyebrow">
+                <span class="panel-eyebrow-icon">&#10022;</span>
+                Most Targeted Endpoints
+            </span>
+
+            <div class="rank-list">
+                <div class="rank-list-header">
+                    <span>Rank</span>
+                    <span>Endpoint</span>
+                    <span class="rank-align-right">Hits</span>
+                </div>
+                {% for endpoint in top_targeted_endpoints %}
+                <div class="rank-row">
+                    <span class="rank {% if forloop.counter <= 2 %}is-top{% endif %}">#{{ forloop.counter }}</span>
+                    <span class="rank-label cell-mono">{{ endpoint.path }}</span>
+                    <span class="rank-value">{{ endpoint.hits }}</span>
+                </div>
+                {% endfor %}
+            </div>
+        </section>
+
+    </div>
+
+{% endblock %}

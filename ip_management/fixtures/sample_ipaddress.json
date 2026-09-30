@@ -1,0 +1,247 @@
+[
+  {
+    "model": "ip_management.blockedip",
+    "pk": 1,
+    "fields": {
+      "ip_address": "192.168.45.212",
+      "reason": "Repeated UNION SELECT attempts on login endpoint",
+      "attempt_count": 14203,
+      "is_active": true,
+      "date_added": "2023-10-27T14:32:00Z",
+      "date_unblocked": null,
+      "added_by": null
+    }
+  },
+  {
+    "model": "ip_management.blockedip",
+    "pk": 2,
+    "fields": {
+      "ip_address": "45.33.12.98",
+      "reason": "Automated scanning tool identified (Nikto/Nmap)",
+      "attempt_count": 892,
+      "is_active": true,
+      "date_added": "2023-10-26T09:15:00Z",
+      "date_unblocked": null,
+      "added_by": null
+    }
+  },
+  {
+    "model": "ip_management.blockedip",
+    "pk": 3,
+    "fields": {
+      "ip_address": "203.0.113.44",
+      "reason": "Critical: Blind SQLi pattern match",
+      "attempt_count": 3,
+      "is_active": true,
+      "date_added": "2023-10-27T18:05:00Z",
+      "date_unblocked": null,
+      "added_by": null
+    }
+  },
+  {
+    "model": "ip_management.blockedip",
+    "pk": 4,
+    "fields": {
+      "ip_address": "10.0.5.55",
+      "reason": "Manual block (Suspicious timing)",
+      "attempt_count": 0,
+      "is_active": false,
+      "date_added": "2023-10-20T11:00:00Z",
+      "date_unblocked": "2023-10-25T10:00:00Z",
+      "added_by": null
+    }
+  },
+  {
+    "model": "ip_management.blockedip",
+    "pk": 5,
+    "fields": {
+      "ip_address": "185.220.101.5",
+      "reason": "Known Tor exit node attempting brute force",
+      "attempt_count": 5321,
+      "is_active": true,
+      "date_added": "2023-11-01T03:14:22Z",
+      "date_unblocked": null,
+      "added_by": null
+    }
+  },
+  {
+    "model": "ip_management.blockedip",
+    "pk": 6,
+    "fields": {
+      "ip_address": "198.51.100.17",
+      "reason": "Path traversal attempt (/etc/passwd)",
+      "attempt_count": 42,
+      "is_active": true,
+      "date_added": "2023-11-03T16:45:10Z",
+      "date_unblocked": null,
+      "added_by": null
+    }
+  },
+  {
+    "model": "ip_management.blockedip",
+    "pk": 7,
+    "fields": {
+      "ip_address": "103.253.145.18",
+      "reason": "Credential stuffing on /api/v1/token/",
+      "attempt_count": 28941,
+      "is_active": true,
+      "date_added": "2023-11-05T20:11:00Z",
+      "date_unblocked": null,
+      "added_by": null
+    }
+  },
+  {
+    "model": "ip_management.blockedip",
+    "pk": 8,
+    "fields": {
+      "ip_address": "192.0.2.146",
+      "reason": "Cross-Site Scripting (XSS) payload in headers",
+      "attempt_count": 12,
+      "is_active": false,
+      "date_added": "2023-11-06T08:22:30Z",
+      "date_unblocked": "2023-11-13T08:22:30Z",
+      "added_by": null
+    }
+  },
+  {
+    "model": "ip_management.blockedip",
+    "pk": 9,
+    "fields": {
+      "ip_address": "91.240.118.172",
+      "reason": "SSH / Admin panel probe",
+      "attempt_count": 614,
+      "is_active": true,
+      "date_added": "2023-11-10T12:00:04Z",
+      "date_unblocked": null,
+      "added_by": null
+    }
+  },
+  {
+    "model": "ip_management.blockedip",
+    "pk": 10,
+    "fields": {
+      "ip_address": "2a01:4f8:1c1c:4b::1",
+      "reason": "IPv6 Rate limit exceeded (DDoS behavior)",
+      "attempt_count": 105432,
+      "is_active": true,
+      "date_added": "2023-11-12T23:59:59Z",
+      "date_unblocked": null,
+      "added_by": null
+    }
+  },
+  {
+    "model": "ip_management.blockedip",
+    "pk": 11,
+    "fields": {
+      "ip_address": "172.56.21.89",
+      "reason": "Malformed HTTP payload attacks",
+      "attempt_count": 78,
+      "is_active": true,
+      "date_added": "2023-11-15T14:10:05Z",
+      "date_unblocked": null,
+      "added_by": null
+    }
+  },
+  {
+    "model": "ip_management.blockedip",
+    "pk": 12,
+    "fields": {
+      "ip_address": "104.244.76.13",
+      "reason": "Scraping protected endpoints without user-agent",
+      "attempt_count": 4501,
+      "is_active": true,
+      "date_added": "2023-11-18T09:40:12Z",
+      "date_unblocked": null,
+      "added_by": null
+    }
+  },
+  {
+    "model": "ip_management.blockedip",
+    "pk": 13,
+    "fields": {
+      "ip_address": "162.243.10.112",
+      "reason": "Remote Code Execution (RCE) payload signature",
+      "attempt_count": 5,
+      "is_active": true,
+      "date_added": "2023-11-20T17:33:41Z",
+      "date_unblocked": null,
+      "added_by": null
+    }
+  },
+  {
+    "model": "ip_management.blockedip",
+    "pk": 14,
+    "fields": {
+      "ip_address": "80.82.77.139",
+      "reason": "Abuse IP database match - high risk proxy",
+      "attempt_count": 120,
+      "is_active": false,
+      "date_added": "2023-11-22T04:19:00Z",
+      "date_unblocked": "2023-11-29T04:19:00Z",
+      "added_by": null
+    }
+  },
+  {
+    "model": "ip_management.blockedip",
+    "pk": 15,
+    "fields": {
+      "ip_address": "194.26.29.110",
+      "reason": "Dictionary attack on password reset",
+      "attempt_count": 1823,
+      "is_active": true,
+      "date_added": "2023-11-25T11:05:30Z",
+      "date_unblocked": null,
+      "added_by": null
+    }
+  },
+  {
+    "model": "ip_management.whitelistedip",
+    "pk": 1,
+    "fields": {
+      "ip_address": "127.0.0.1",
+      "reason": "Localhost development",
+      "date_added": "2023-10-01T00:00:00Z",
+      "added_by": null
+    }
+  },
+  {
+    "model": "ip_management.whitelistedip",
+    "pk": 2,
+    "fields": {
+      "ip_address": "192.168.1.100",
+      "reason": "Internal Office Network Gateway",
+      "date_added": "2023-10-10T08:30:00Z",
+      "added_by": null
+    }
+  },
+  {
+    "model": "ip_management.whitelistedip",
+    "pk": 3,
+    "fields": {
+      "ip_address": "52.92.16.44",
+      "reason": "Payment Gateway Webhook IP",
+      "date_added": "2023-10-15T11:20:00Z",
+      "added_by": null
+    }
+  },
+  {
+    "model": "ip_management.whitelistedip",
+    "pk": 4,
+    "fields": {
+      "ip_address": "34.201.90.11",
+      "reason": "Staging Server Proxy",
+      "date_added": "2023-10-18T14:05:00Z",
+      "added_by": null
+    }
+  },
+  {
+    "model": "ip_management.whitelistedip",
+    "pk": 5,
+    "fields": {
+      "ip_address": "13.107.42.16",
+      "reason": "Monitoring Service Uptime Robot",
+      "date_added": "2023-10-22T09:00:00Z",
+      "added_by": null
+    }
+  }
+]

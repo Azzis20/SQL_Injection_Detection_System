@@ -1,0 +1,159 @@
+{% extends "layout.html" %}
+{% load static %}
+
+{% block title %}
+    Dashboard
+{% endblock %}
+
+{% block style %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/dashboard.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/logs.css' %}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+    <script src="{% static 'script/dashboard.js' %}"></script>
+     
+{% endblock %}
+
+
+
+{% block content %}
+
+    <div class="topbar">
+        <span class="topbar-title">Threat Intelligence Engine</span>
+        {% comment %} <div class="topbar-actions">
+            <button class="icon-btn" id="refreshBtn" title="Refresh">
+                <i class="fas fa-rotate-right"></i>
+            </button>
+            <button class="icon-btn" title="Help">
+                <i class="fas fa-circle-question"></i>
+            </button>
+            <button class="icon-btn" title="Account">
+                <i class="fas fa-circle-user"></i>
+            </button>
+        </div> {% endcomment %}
+    </div>
+
+    <div class="stats-grid">
+        <div class="stat-card accent-blue">
+            <div class="stat-card-header">
+                <span class="stat-label">Total Requests Today</span>
+                <i class="fas fa-globe stat-icon"></i>
+            </div>
+            <div class="stat-value">{{ total_requests }}</div>
+            <div class="stat-meta {% if requests_change_pct >= 0 %}positive{% else %}negative{% endif %}">
+                <i class="fas fa-arrow-trend-{% if requests_change_pct >= 0 %}up{% else %}down{% endif %}"></i>
+                {{ requests_change_pct }}% vs yesterday
+            </div>
+        </div>
+
+        <div class="stat-card accent-danger">
+            <div class="stat-card-header">
+                <span class="stat-label">Blocked Attempts Today</span>
+                <i class="fas fa-ban stat-icon"></i>
+            </div>
+            <div class="stat-value danger">{{ blocked_attempts }}</div>
+            {% if high_risk_detected %}
+                <div class="stat-meta warning">
+                    <i class="fas fa-triangle-exclamation"></i> High risk volume detected
+                </div>
+            {% else %}
+                <div class="stat-meta">
+                    <i class="fas fa-circle-check"></i> No high-risk activity
+                </div>
+            {% endif %}
+        </div>
+
+        <div class="stat-card accent-green">
+            <div class="stat-card-header">
+                <span class="stat-label">Active Rules</span>
+                <i class="fas fa-shield stat-icon"></i>
+            </div>
+            <div class="stat-value">{{ rules_active|default:"0" }}</div>
+            <div class="stat-meta muted">
+                <i class="fas fa-rotate"></i> Last updated 2m ago
+            </div>
+        </div>
+    </div>
+
+    <div class="panel chart-panel">
+        <div class="panel-header">
+            <h2 class="panel-title"><i class="fas fa-chart-line"></i> Real-time Traffic Monitor</h2>
+            <div class="chart-legend">
+                <span class="legend-item"><span class="legend-dot total"></span> Total Requests</span>
+                <span class="legend-item"><span class="legend-dot blocked"></span> Blocked Threats</span>
+            </div>
+        </div>
+        <div class="chart-container">
+            <canvas id="trafficChart"></canvas>
+        </div>
+    </div>
+
+    <div class="bottom-grid">
+        <div class="panel feed-panel">
+            <div class="panel-header">
+                <h2 class="panel-title"><i class="fas fa-triangle-exclamation"></i>Attack Feed</h2>
+                <a href="{% url 'attack_logs:index' %}" class="panel-link">View All Logs</a>
+            </div>
+            <div class="table-wrapper borderless">
+                <table class="data-table compact">
+                    <thead>
+                        <tr>
+                            <th>Timestamp</th>
+                            <th>Source IP</th>
+                            <th>Endpoint</th>
+                            <th>Risk</th>
+                            <th>Payload Snippet</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for log in logs %}
+                        <tr>
+                            <td class="cell-muted">{{ log.timestamp }}</td>
+                            <td class="cell-ip">{{ log.source_ip }}</td>
+                            <td class="cell-endpoint">{{ log.endpoint }}</td>
+                            <td class="cell-risk">
+                                <span class="badge {{ log.risk_level|lower|default:'low' }}">
+                                    {{ log.risk_level|default:"Unknown" }}
+                                </span>
+                            </td>
+                            <td class="cell-payload">{{ log.payload_snippet }}</td>
+                        </tr>
+                        {% empty %}
+                            <tr>
+                                <td colspan="5" class="cell-muted" style="text-align:center; padding:24px;">
+                                    No attack logs found.
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="panel distribution-panel">
+            <div class="panel-header">
+                <h2 class="panel-title"><i class="fas fa-circle-nodes"></i> Threat Distribution</h2>
+            </div>
+
+            <div class="distribution-ring"
+                 id="distributionRing"
+                 data-critical="{{ threat_distribution.critical|default:15 }}"
+                 data-high="{{ threat_distribution.high|default:30 }}"
+                 data-medium="{{ threat_distribution.medium|default:25 }}"
+                 data-low="{{ threat_distribution.low|default:30 }}">
+                <div class="distribution-value">
+                    <div class="distribution-number">{{ total_threats|default:"1.4k" }}</div>
+                    <div class="distribution-caption">Total Threats</div>
+                </div>
+            </div>
+
+            <ul class="distribution-legend">
+                <li><span class="legend-dot critical"></span> Critical <b>{{ threat_distribution.critical|default:0 }}%</b></li>
+                <li><span class="legend-dot high"></span> High <b>{{ threat_distribution.high|default:0 }}%</b></li>
+                <li><span class="legend-dot medium"></span> Medium <b>{{ threat_distribution.medium|default:0 }}%</b></li>
+                <li><span class="legend-dot low"></span> Low <b>{{ threat_distribution.low|default:0 }}%</b></li>
+            </ul>
+        </div>
+    </div>
+
+{% endblock %}
+

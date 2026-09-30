@@ -1,0 +1,305 @@
+/* =========================================================
+   Dashboard — Page-specific Styles
+   Topbar, stat cards, traffic chart panel, live feed,
+   threat distribution
+   Depends on variables + shared components in style.css
+   ========================================================= */
+
+/* ---------------------------------------------------------
+   Topbar
+   --------------------------------------------------------- */
+
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+
+.topbar-title {
+  font-family: var(--font-mono);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-accent);
+  letter-spacing: 0.3px;
+}
+
+.topbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 7px;
+  border: none;
+  background-color: transparent;
+  color: var(--color-text-secondary);
+  font-size: 15px;
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.icon-btn:hover {
+  background-color: rgba(255, 255, 255, 0.06);
+  color: var(--color-text-primary);
+}
+
+.icon-btn.spinning i {
+  animation: icon-spin 0.6s linear;
+}
+
+@keyframes icon-spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+/* ---------------------------------------------------------
+   Stat cards
+   --------------------------------------------------------- */
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.stat-card {
+  padding: 18px 20px;
+  background-color: var(--color-bg-sidebar);
+  border: 1px solid var(--color-border);
+  border-top: 2px solid var(--stat-accent, var(--color-border));
+  border-radius: 8px;
+}
+
+.stat-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+
+.stat-label {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--color-text-secondary);
+}
+
+.stat-icon {
+  font-size: 13px;
+  color: var(--color-text-secondary);
+}
+
+.stat-value {
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--color-text-primary);
+  line-height: 1;
+  margin-bottom: 10px;
+}
+
+.stat-value.danger {
+  color: #f87171;
+}
+
+.stat-meta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.stat-meta.positive { color: #4ade80; }
+.stat-meta.warning   { color: #fb923c; }
+.stat-meta.muted     { color: var(--color-text-secondary); }
+
+.stat-card.accent-blue   { --stat-accent: var(--color-accent); }
+.stat-card.accent-danger { --stat-accent: #f87171; }
+.stat-card.accent-green  { --stat-accent: #4ade80; }
+
+/* ---------------------------------------------------------
+   Panels (shared shell for chart / feed / distribution)
+   --------------------------------------------------------- */
+
+.panel {
+  background-color: var(--color-bg-sidebar);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+}
+
+.panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.panel-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--color-text-primary);
+  margin: 0;
+}
+
+.panel-title i {
+  font-size: 13px;
+  color: var(--color-text-secondary);
+}
+
+.panel-link {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--color-accent);
+  text-decoration: none;
+}
+
+.panel-link:hover {
+  text-decoration: underline;
+}
+
+/* ---------------------------------------------------------
+   Traffic chart panel
+   --------------------------------------------------------- */
+
+.chart-panel {
+  margin-bottom: 20px;
+}
+
+.chart-legend {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--color-text-secondary);
+}
+
+.legend-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: currentColor;
+}
+
+.legend-dot.total    { color: var(--color-accent); }
+.legend-dot.blocked  { color: #f87171; }
+.legend-dot.critical { color: #f87171; }
+.legend-dot.high     { color: #fb923c; }
+.legend-dot.medium   { color: #facc15; }
+.legend-dot.low      { color: #4ade80; }
+
+.chart-container {
+  padding: 16px 20px 20px;
+  height: 320px;
+}
+
+/* ---------------------------------------------------------
+   Bottom row: Live Attack Feed + Threat Distribution
+   --------------------------------------------------------- */
+
+.bottom-grid {
+  display: grid;
+  grid-template-columns: 2.3fr 1fr;
+  gap: 20px;
+  align-items: start;
+}
+
+.feed-panel .table-wrapper {
+  border: none;
+  border-radius: 0;
+}
+
+/* ---------------------------------------------------------
+   Threat distribution
+   --------------------------------------------------------- */
+
+.distribution-panel {
+  padding-bottom: 20px;
+}
+
+.distribution-ring {
+  position: relative;
+  width: 150px;
+  height: 150px;
+  margin: 24px auto 20px;
+  border-radius: 50%;
+  background: conic-gradient(var(--ring-gradient, var(--color-border)));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.distribution-ring::before {
+  content: "";
+  position: absolute;
+  inset: 14px;
+  border-radius: 50%;
+  background-color: var(--color-bg-sidebar);
+}
+
+.distribution-value {
+  position: relative;
+  text-align: center;
+}
+
+.distribution-number {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--color-text-primary);
+  line-height: 1.1;
+}
+
+.distribution-caption {
+  font-size: 11px;
+  color: var(--color-text-secondary);
+  margin-top: 2px;
+}
+
+.distribution-legend {
+  list-style: none;
+  margin: 0;
+  padding: 0 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.distribution-legend li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--color-text-secondary);
+}
+
+.distribution-legend li b {
+  margin-left: auto;
+  color: var(--color-text-primary);
+  font-weight: 600;
+}
+
+@media (max-width: 1100px) {
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+  .bottom-grid {
+    grid-template-columns: 1fr;
+  }
+}
