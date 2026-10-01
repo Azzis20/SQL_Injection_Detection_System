@@ -1,0 +1,99 @@
+{% extends "layout.html" %}
+{% load static %}
+{% block title %}
+    Detection Rule Details
+{% endblock %}
+
+{% block style %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/detection-rule.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="detail-container">
+    <div class="page-header">
+        <div class="page-header-text">
+            <h1 class="page-title">{{ rule.name }}</h1>
+            <p class="page-subtitle">Rule #{{ rule.id }} · created {{ rule.created_at|date:"M j, Y" }}</p>
+        </div>
+        <div class="header-actions">
+            <a class="btn btn-text" href="{% url 'detection_rule:index' %}">Back to rules</a>
+            <a class="btn btn-primary" href="{% url 'detection_rule:create' %}">Add new rule</a>
+        </div>
+    </div>
+
+    {% if just_created %}
+        <div class="form-alert form-alert-success" role="status">Rule saved.</div>
+    {% endif %}
+
+    <div class="panel-grid">
+        <div class="panel">
+            <div class="panel-header">
+                <div>
+                    <h2 class="panel-title">Pattern</h2>
+                    <p class="panel-subtitle">Matched against incoming request input</p>
+                </div>
+            </div>
+            <pre class="code-block"><code>{{ rule.pattern }}</code></pre>
+
+            <div class="panel-header detail-section">
+                <div>
+                    <h2 class="panel-title">Recent matches</h2>
+                    <p class="panel-subtitle">{{ match_count }} total · showing the latest {{ matches|length }}</p>
+                </div>
+            </div>
+            {% if matches %}
+                <ul class="match-list">
+                    {% for match in matches %}
+                        <li class="match-item">
+                            <code class="match-value">{{ match.matched_value }}</code>
+                            <span class="match-meta">Request #{{ match.request_log_id }} · +{{ match.points_awarded }} pts</span>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p class="empty-state">This rule hasn't matched any requests yet.</p>
+            {% endif %}
+        </div>
+
+        <div class="panel">
+            <div class="panel-header">
+                <div>
+                    <h2 class="panel-title">Details</h2>
+                </div>
+            </div>
+            <dl class="detail-list">
+                <div class="detail-row">
+                    <dt>Status</dt>
+                    <dd>
+                        {% if rule.is_enabled %}<span class="status-pill status-pill-on">Enabled</span>
+                        {% else %}<span class="status-pill">Disabled</span>{% endif %}
+                    </dd>
+                </div>
+                <div class="detail-row">
+                    <dt>Type</dt>
+                    <dd><span class="badge-type">{{ rule.get_rule_type_display }}</span></dd>
+                </div>
+                <div class="detail-row">
+                    <dt>Category</dt>
+                    <dd>{% if rule.category %}{{ rule.category }}{% else %}<span class="cell-muted">None</span>{% endif %}</dd>
+                </div>
+                <div class="detail-row">
+                    <dt>Risk weight</dt>
+                    <dd>
+                        <div class="risk-weight risk-weight-{{ rule.risk_level }}">
+                            <span class="risk-weight-value">{{ rule.risk_weight }}</span>
+                            <span class="risk-weight-bar">
+                                <span class="risk-weight-bar-fill risk-weight-{{ rule.risk_level }}" style="width: {{ rule.risk_weight }}%"></span>
+                            </span>
+                        </div>
+                    </dd>
+                </div>
+                <div class="detail-row">
+                    <dt>Last updated</dt>
+                    <dd>{{ rule.updated_at|date:"M j, Y H:i" }}</dd>
+                </div>
+            </dl>
+        </div>
+    </div>
+</div>
+{% endblock %}

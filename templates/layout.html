@@ -58,12 +58,12 @@
                 </a>
             </li>
 
-            <li class="sidebar-item">
-                <a class="sidebar-link {% if request.resolver_match.namespace == 'stats' %}active{% endif %}" href="{% url 'stats:index' %}">
-                    <i class="fas fa-chart-column sidebar-icon"></i>
-                    <span>Statistics</span>
-                </a>
-            </li>
+                {% comment %} <li class="sidebar-item">
+                    <a class="sidebar-link {% if request.resolver_match.namespace == 'stats' %}active{% endif %}" href="{% url 'stats:index' %}">
+                        <i class="fas fa-chart-column sidebar-icon"></i>
+                        <span>Statistics</span>
+                    </a>
+                </li> {% endcomment %}
 
             <li class="sidebar-item">
                 <a class="sidebar-link {% if  request.resolver_match.namespace == 'ip_management' %}active{% endif %}" href="{% url 'ip_management:index' %}">
@@ -79,12 +79,12 @@
                 </a>
             </li> {% endcomment %}
 
-            <li class="sidebar-item">
+            {% comment %} <li class="sidebar-item">
                 <a class="sidebar-link {% if request.resolver_match.namespace == 'settings' %}active{% endif %}" href="{% url 'settings:index' %}">
                     <i class="fas fa-gear sidebar-icon"></i>
                     <span>Settings</span>
                 </a>
-            </li>
+            </li> {% endcomment %}
         </ul>
 
         <div class="sidebar-item sidebar-footer">

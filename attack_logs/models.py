@@ -1,5 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.utils import timezone
+
 
 # Create your models here.
 
@@ -27,7 +29,8 @@ class RequestLog(models.Model):
         ("blocked", "Blocked"),
     ]
 
-    timestamp = models.DateTimeField(auto_now_add=True)
+    # timestamp = models.DateTimeField(auto_now_add=True)
+    timestamp = models.DateTimeField(default=timezone.now, db_index=True)
     source_ip = models.GenericIPAddressField()
     endpoint = models.CharField(max_length=255)
     method = models.CharField(max_length=10, choices=METHOD_CHOICES)

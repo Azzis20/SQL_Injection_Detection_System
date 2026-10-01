@@ -61,12 +61,12 @@
             </p>
         </div>
 
-        <div class="form-footer">
+        {% comment %} <div class="form-footer">
             <a href="{% url 'ip_management:index' %}" class="btn btn-secondary">Close</a>
             <button type="button" class="btn btn-primary action-link-unblock" data-ip-id="{{ entry.id }}">
                 <span class="btn-icon">&#128274;</span> Unblock IP Address
             </button>
-        </div>
+        </div> {% endcomment %}
 
     </div>
 </div>

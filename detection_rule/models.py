@@ -43,3 +43,17 @@ class RuleMatch(models.Model):
 
     def __str__(self):
         return f"{self.rule.name} -> {self.request_log_id}"
+
+    # Add inside DetectionRule in models.py (below __str__)
+ 
+    @property
+    def risk_level(self):
+        """Maps risk_weight to the css suffix used by .risk-weight-*"""
+        if self.risk_weight >= 80:
+            return "critical"
+        if self.risk_weight >= 60:
+            return "high"
+        if self.risk_weight >= 30:
+            return "medium"
+        return "low"
+ 

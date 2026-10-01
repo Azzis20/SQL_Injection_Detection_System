@@ -10,39 +10,43 @@ from detection_rule.models import DetectionRule
 
 @login_required
 def traffic_data(request):
-    """Returns request/blocked counts bucketed into 15-min intervals
-    for the last hour, using time range boundaries."""
-    now = timezone.localtime(timezone.now())  # Convert to current active timezone
+    """
+    Returns request/blocked counts bucketed into 15-min intervals
+    for the last hour.
+    """
+    now = timezone.now()
     bucket_minutes = 15
     num_buckets = 5
 
     start = now - timedelta(minutes=bucket_minutes * (num_buckets - 1))
     start = start.replace(
         minute=(start.minute // bucket_minutes) * bucket_minutes,
-        second=0, microsecond=0,
+        second=0,
+        microsecond=0,
     )
 
     labels, total_requests, blocked_threats = [], [], []
 
     for i in range(num_buckets):
-        bucket_start = start + timedelta(minutes=bucket_minutes * i)
-        bucket_end = bucket_start + timedelta(minutes=bucket_minutes)
+        b_start = start + timedelta(minutes=bucket_minutes * i)
+        b_end = b_start + timedelta(minutes=bucket_minutes)
 
-        label = bucket_start.strftime("%H:%M")
+        local_label_time = timezone.localtime(b_start)
+        label = local_label_time.strftime("%H:%M")
         if i == num_buckets - 1:
             label += " (Now)"
         labels.append(label)
 
-        # Single aggregated query per bucket
         counts = RequestLog.objects.filter(
-            timestamp__gte=bucket_start, timestamp__lt=bucket_end
+            timestamp__gte=b_start,
+            timestamp__lt=b_end,
         ).aggregate(
             total=Count("id"),
             blocked=Count("id", filter=Q(action_taken="blocked"))
         )
 
-        total_requests.append(counts["total"])
-        blocked_threats.append(counts["blocked"])
+        total_requests.append(counts["total"] or 0)
+        blocked_threats.append(counts["blocked"] or 0)
 
     return JsonResponse(
         {

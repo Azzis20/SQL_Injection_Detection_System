@@ -48,7 +48,7 @@ def ip_management(request):
         reverse=True
     )
 
-    paginator = Paginator(combined_list, 5)
+    paginator = Paginator(combined_list, 10)
     page_number = request.GET.get('page', 1)
     page_obj = paginator.get_page(page_number)
 

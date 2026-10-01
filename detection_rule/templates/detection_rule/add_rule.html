@@ -1,0 +1,101 @@
+{% extends "layout.html" %}
+{% load static %}
+{% block title %}
+    Detection Rule Creation
+{% endblock %}
+
+{% block style %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/detection-rule.css' %}">
+{% endblock %}
+
+{% block content %}
+    <div class="page-header">
+        <div class="page-header-text">
+            <h1 class="page-title">Create Detection Rule</h1>
+            <p class="page-subtitle">Define a pattern the detection engine checks every request against</p>
+        </div>
+    </div>
+
+    <div class="panel form-panel">
+        {% if errors %}
+            <div class="form-alert" role="alert">
+                <strong>Fix the following before saving:</strong>
+                <ul>
+                    {% for error in errors %}<li>{{ error }}</li>{% endfor %}
+                </ul>
+            </div>
+        {% endif %}
+
+        <form method="post" action="{% url 'detection_rule:create' %}" novalidate>
+            {% csrf_token %}
+
+            <div class="form-group">
+                <label class="form-label" for="name">Rule name</label>
+                <input class="form-input" type="text" id="name" name="name" maxlength="150"
+                       value="{{ values.name }}" placeholder="e.g. UNION SELECT injection" required>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label class="form-label" for="rule_type">Type</label>
+                    <select class="form-select" id="rule_type" name="rule_type" required>
+                        {% for value, label in rule_types %}
+                            <option value="{{ value }}" {% if values.rule_type == value %}selected{% endif %}>{{ label }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="category">Category</label>
+                    <input class="form-input" type="text" id="category" name="category" maxlength="100"
+                           list="category-options" value="{{ values.category }}" placeholder="e.g. Union-based">
+                    <datalist id="category-options">
+                        <option value="Union-based">
+                        <option value="Boolean-based">
+                        <option value="Time-based">
+                        <option value="Error-based">
+                        <option value="Stacked queries">
+                    </datalist>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="pattern">Pattern</label>
+                <textarea class="form-textarea" id="pattern" name="pattern" rows="4"
+                          placeholder="(?i)\bunion\b\s+select" required>{{ values.pattern }}</textarea>
+                <p class="field-hint">Regex or keyword matched against request input. Signature and anomaly patterns must be valid regex.</p>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="risk_weight">Risk weight</label>
+                <div class="range-field">
+                    <input type="range" id="risk_weight" name="risk_weight" min="1" max="100"
+                           value="{{ values.risk_weight }}">
+                    <output class="range-value" id="risk_weight_output" for="risk_weight">{{ values.risk_weight }}</output>
+                </div>
+                <p class="field-hint">Points added to a request's risk score when this rule triggers.</p>
+            </div>
+
+            <div class="panel-row">
+                <label class="checkbox-label">
+                    <input type="checkbox" name="is_enabled" {% if values.is_enabled %}checked{% endif %}>
+                    Enable this rule immediately
+                </label>
+            </div>
+
+            <div class="form-actions">
+                <a class="btn btn-text" href="{% url 'detection_rule:index' %}">Cancel</a>
+                <button type="submit" class="btn btn-primary">Save rule</button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        (function () {
+            var slider = document.getElementById("risk_weight");
+            var output = document.getElementById("risk_weight_output");
+            if (slider && output) {
+                slider.addEventListener("input", function () { output.textContent = slider.value; });
+            }
+        })();
+    </script>
+{% endblock %}

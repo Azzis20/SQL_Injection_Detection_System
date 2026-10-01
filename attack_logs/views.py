@@ -1,21 +1,21 @@
-from datetime import timedelta
 
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.db.models import Q
 from django.shortcuts import get_object_or_404, render
 from django.utils import timezone
+from datetime import timedelta
 
 from .models import RequestLog
 
 DATE_RANGES = {
     "all": ("All Time", None),
     "24h": ("Last 24 Hours", timedelta(hours=24)),
-    "week": ("Last Week", timedelta(weeks=1)),
-    "month": ("Last Month", timedelta(days=30)),
+    "week": ("Last 7 Days", timedelta(days=7)),
+    "30days": ("Last 30 Days", timedelta(days=30)),  # matched to URL parameter
     "year": ("Last Year", timedelta(days=365)),
-    
 }
+
 DEFAULT_RANGE = "all"
 
 RISK_LEVELS = {
@@ -80,7 +80,9 @@ def attack_logs(request):
 
     delta = DATE_RANGES[range_key][1]
     if delta is not None:
-        logs = logs.filter(timestamp__gte=timezone.now() - delta)
+        # Use timezone.localtime(timezone.now()) if working with local DB timestamps
+        cutoff = timezone.now() - delta
+        logs = logs.filter(timestamp__gte=cutoff)
         
     if risk:
         logs = logs.filter(risk_level=risk)
