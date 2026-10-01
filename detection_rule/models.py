@@ -35,5 +35,11 @@ class RuleMatch(models.Model):
     matched_value = models.TextField(help_text="The exact substring/value that matched the rule")
     points_awarded = models.PositiveIntegerField(default=0)
 
+    class Meta:
+        indexes = [
+            models.Index(fields=["request_log"]),
+            models.Index(fields=["rule"]),
+        ]
+
     def __str__(self):
         return f"{self.rule.name} -> {self.request_log_id}"

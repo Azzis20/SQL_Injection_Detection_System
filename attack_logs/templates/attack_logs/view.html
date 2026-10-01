@@ -50,7 +50,7 @@
                         <div class="metadata-field-value">
                             <span class="metadata-value-pill">
                                 {{ log.source_ip }}
-                                <button type="button" class="metadata-locate-btn" title="Locate IP">&#128205;</button>
+                                {% comment %} <button type="button" class="metadata-locate-btn" title="Locate IP">&#128205;</button> {% endcomment %}
                             </span>
                         </div>
                     </div>
@@ -63,7 +63,7 @@
                     <div class="metadata-field">
                         <div class="metadata-field-label">HTTP Method</div>
                         <div class="metadata-field-value">
-                            <span class="metadata-value-pill">{{ log.http_method }}</span>
+                            <span class="metadata-value-pill">{{ log.method }}</span>
                         </div>
                     </div>
 
@@ -117,7 +117,7 @@
                 <div class="log-card-body">
                     <div class="log-comment"># Threat Context: {{ log.threat_context }}</div>
                     <div class="log-line-label">Raw Payload String:</div>
-                    <code class="log-payload">"{{ log.raw_payload }}"</code>
+                    <code class="log-payload">" {{ log.payload_snippet}} "</code>
                 </div>
             </div>
 

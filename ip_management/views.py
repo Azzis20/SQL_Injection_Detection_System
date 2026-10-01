@@ -3,9 +3,11 @@ from itertools import chain
 from django.contrib import messages
 from django.core.paginator import Paginator
 from django.http import JsonResponse
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, redirect, render
 from .models import BlockedIP, WhitelistedIP
 from django.db.models import Q
+
 
 def search_ip_management(request, blocked, whitelisted):
     """Filter blocked and whitelisted IPs based on a search query."""
@@ -25,6 +27,16 @@ def search_ip_management(request, blocked, whitelisted):
 
 
 
+
+
+def _is_valid_ip(value):
+    try:
+        ipaddress.ip_address(value)
+        return True
+    except ValueError:
+        return False
+
+@login_required
 def ip_management(request):
     blocked = BlockedIP.objects.all()
     whitelisted = WhitelistedIP.objects.all()
@@ -51,14 +63,7 @@ def ip_management(request):
         }
     )
 
-
-def _is_valid_ip(value):
-    try:
-        ipaddress.ip_address(value)
-        return True
-    except ValueError:
-        return False
-
+@login_required
 def block_ip(request):
     """Add IP to Blocklist form (GET) + submit handler (POST)."""
     if request.method == "POST":
@@ -94,13 +99,13 @@ def block_ip(request):
 
     return render(request, "ip_management/add_blocklist.html", {})
 
-
+@login_required
 def view_blocked_ip(request, pk):
     """Read-only detail page for a blocked IP entry."""
     entry = get_object_or_404(BlockedIP, pk=pk)
     return render(request, "ip_management/view_details.html", {"entry": entry})
 
-
+@login_required
 def check_ip_blocked(request):
     """AJAX endpoint used by the Add-to-Blocklist form to grey out the
     submit button when the entered IP is already blocked."""

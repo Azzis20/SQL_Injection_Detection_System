@@ -1,32 +1,55 @@
+from urllib.parse import unquote_plus
 import requests
 from django.http import HttpResponse
 from attack_logs.models import RequestLog
 from ip_management.models import BlockedIP, WhitelistedIP
 from settings.models import SystemSettings
-
+from django.views.decorators.csrf import csrf_exempt
 from .detection import run_detection
 
 TARGET_APP_URL = "http://localhost:5000"
 
+def get_client_ip(request):
+    """Prefer X-Forwarded-For when behind a tunnel/proxy, fall back to REMOTE_ADDR."""
+    forwarded_for = request.META.get("HTTP_X_FORWARDED_FOR")
+    if forwarded_for:
+        return forwarded_for.split(",")[0].strip()
+    return request.META.get("REMOTE_ADDR")
 
+#common static file extensions
+IGNORED_EXTENSIONS = (
+    ".css", ".js", ".png", ".jpg", ".jpeg", 
+    ".gif", ".ico", ".svg", ".woff", ".woff2", ".ttf", ".eot"
+)
+
+IGNORED_PATHS = {"favicon.ico", "traffic-data/", "traffic-data"}
+
+@csrf_exempt
 def gateway_view(request, full_path=""):
-    client_ip = request.META.get("REMOTE_ADDR")
+
+    # Check if request is for static assets or ignored paths
+    if (
+        full_path in IGNORED_PATHS
+        or full_path.startswith("static/")
+        or full_path.startswith("media/")
+        or full_path.lower().endswith(IGNORED_EXTENSIONS)
+    ):
+        return forward_to_target(request, full_path)
+
+    client_ip = get_client_ip(request)
     print(f"DEBUG client_ip: {repr(client_ip)}")
     print(f"DEBUG full_path: {repr(full_path)}")
 
-    # 1. Whitelisted IPs skip detection entirely and go straight through
     if WhitelistedIP.objects.filter(ip_address=client_ip).exists():
         return forward_to_target(request, full_path)
 
-    # 2. Blocked IPs are rejected instantly, no detection needed
     if BlockedIP.objects.filter(ip_address=client_ip, is_active=True).exists():
         return HttpResponse("Blocked", status=403)
 
-    # 3. Capture request data
     query_params = request.GET.dict()
     body = request.body.decode(errors="ignore")
+    decoded_body = unquote_plus(body)
 
-    # 4. Log the request first (so RuleMatch has something to link to)
     log = RequestLog.objects.create(
         source_ip=client_ip,
         endpoint=full_path,
@@ -35,8 +58,7 @@ def gateway_view(request, full_path=""):
         request_body=body,
     )
 
-    # 5. Run detection
-    text_to_check = body + str(query_params)
+    text_to_check = decoded_body + str(query_params) 
     score = run_detection(log, text_to_check)
 
     if score >= 80:
@@ -60,31 +82,39 @@ def gateway_view(request, full_path=""):
     if should_block:
         return HttpResponse("Request blocked: suspicious input detected", status=403)
 
-    # 6. Forward the clean request to the target app
     return forward_to_target(request, full_path)
-
 
 def forward_to_target(request, full_path):
     target_url = f"{TARGET_APP_URL}/{full_path}"
 
-    target_response = requests.request(
-        method=request.method,
-        url=target_url,
-        params=request.GET.dict(),
-        data=request.body,
-        headers={
-            k: v for k, v in request.headers.items()
-            if k.lower() not in ("host", "content-length")
-        },
-        cookies=request.COOKIES,
-        allow_redirects=False,
-    )
+    try:
+        target_response = requests.request(
+            method=request.method,
+            url=target_url,
+            params=request.GET.dict(),
+            data=request.body,
+            headers={
+                k: v for k, v in request.headers.items()
+                if k.lower() not in ("host", "content-length")
+            },
+            cookies=request.COOKIES,
+            allow_redirects=False,
+            timeout=(3.0, 10.0),  # (connect timeout, read timeout)
+        )
+    except requests.exceptions.Timeout:
+        return HttpResponse("Gateway Timeout: Upstream server timed out.", status=504)
+    except requests.exceptions.RequestException:
+        return HttpResponse("Bad Gateway: Unable to connect to upstream server.", status=502)
 
     response = HttpResponse(
         target_response.content,
         status=target_response.status_code,
         content_type=target_response.headers.get("Content-Type"),
     )
+
+    if "Location" in target_response.headers:
+        response["Location"] = target_response.headers["Location"]
+
     for cookie_header in target_response.raw.headers.get_all("Set-Cookie", []):
         response.headers["Set-Cookie"] = cookie_header
 
