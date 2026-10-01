@@ -9,7 +9,7 @@ from django.views.decorators.csrf import csrf_exempt
 from .detection import run_detection
 
 # TARGET_APP_URL = "http://localhost:5000"
-TARGET_APP_URL = os.environ.get("https://flask-dummy-web.onrender.com/", "http://localhost:5000")
+TARGET_APP_URL = os.environ.get("TARGET_APP_URL", "http://localhost:5000")
 
 def get_client_ip(request):
     """Prefer X-Forwarded-For when behind a tunnel/proxy, fall back to REMOTE_ADDR."""
