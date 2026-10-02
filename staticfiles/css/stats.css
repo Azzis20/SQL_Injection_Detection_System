@@ -1,0 +1,286 @@
+/* ===========================================================
+   Statistics page
+   Extends the shared tokens/components in style.css
+   (page-header, toggle-group/toggle-option)
+   =========================================================== */
+
+/* ---------------------------------------------------------
+   Time range control (sits in the page-header)
+   --------------------------------------------------------- */
+
+.time-range {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.time-range-label {
+  font-size: 13px;
+  color: var(--color-text-secondary);
+}
+
+.btn-link {
+  border: none;
+  background: none;
+  padding: 0;
+  color: var(--color-text-secondary);
+  font-family: var(--font-ui);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.btn-link:hover {
+  color: var(--color-text-primary);
+}
+
+/* ---------------------------------------------------------
+   Panel shell (shared by all four sections on this page)
+   --------------------------------------------------------- */
+
+.panel {
+  padding: 20px;
+  background-color: var(--color-bg-sidebar);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  margin-bottom: 16px;
+}
+
+.panel-row-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.panel-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  color: var(--color-text-secondary);
+}
+
+.panel-eyebrow-icon {
+  font-size: 13px;
+  line-height: 1;
+}
+
+.panel-delta {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.panel-delta.is-up {
+  color: var(--color-accent);
+}
+
+.panel-delta.is-down {
+  color: #f87171;
+}
+
+/* ---------------------------------------------------------
+   Attacks Over Time chart
+   --------------------------------------------------------- */
+
+.chart-placeholder {
+  position: relative;
+  height: 220px;
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  background-image: repeating-linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0.04) 0,
+    rgba(255, 255, 255, 0.04) 1px,
+    transparent 1px,
+    transparent 44px
+  );
+}
+
+.chart-placeholder canvas {
+  width: 100%;
+  height: 100%;
+}
+
+/* Shown until a real dataset renders into the canvas above */
+.chart-placeholder-empty {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  color: var(--color-text-secondary);
+  font-size: 13px;
+}
+
+.chart-placeholder-icon {
+  color: var(--color-accent);
+  font-size: 15px;
+}
+
+/* ---------------------------------------------------------
+   Attack Types Breakdown
+   --------------------------------------------------------- */
+
+.breakdown-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.breakdown-item-row {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.breakdown-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.breakdown-value {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.breakdown-bar {
+  height: 4px;
+  border-radius: 2px;
+  background-color: #232b3d;
+  overflow: hidden;
+}
+
+.breakdown-bar-fill {
+  display: block;
+  height: 100%;
+  border-radius: 2px;
+}
+
+/* Series colors: map type.severity to one of these in the template */
+.breakdown-primary { color: var(--color-accent); }
+.breakdown-danger   { color: #f87171; }
+.breakdown-neutral  { color: var(--color-text-primary); }
+.breakdown-muted    { color: var(--color-text-secondary); }
+
+.breakdown-bar-fill.breakdown-primary { background-color: var(--color-accent); }
+.breakdown-bar-fill.breakdown-danger   { background-color: #f87171; }
+.breakdown-bar-fill.breakdown-neutral  { background-color: var(--color-text-primary); }
+.breakdown-bar-fill.breakdown-muted    { background-color: var(--color-text-secondary); }
+
+/* On wide screens, lay the four breakdown items out in a row like the mock */
+@media (min-width: 900px) {
+  .breakdown-list {
+    flex-direction: row;
+  }
+
+  .breakdown-item {
+    flex: 1;
+  }
+}
+
+/* ---------------------------------------------------------
+   Top Attacking IPs / Most Targeted Endpoints
+   --------------------------------------------------------- */
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+/* Each ranked panel sets its own accent for the top two rows */
+.rank-panel--danger {
+  --rank-accent: #f87171;
+}
+
+.rank-panel--info {
+  --rank-accent: #60a5fa;
+}
+
+.rank-list {
+  margin-top: 16px;
+}
+
+.rank-list-header {
+  display: grid;
+  grid-template-columns: 48px 1fr auto;
+  padding: 0 0 10px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  color: var(--color-text-secondary);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.rank-row {
+  display: grid;
+  grid-template-columns: 48px 1fr auto;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.rank-row:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.rank {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-text-secondary);
+}
+
+.rank.is-top {
+  color: var(--rank-accent);
+}
+
+.rank-label {
+  font-size: 13px;
+  color: var(--color-text-primary);
+}
+
+.cell-mono {
+  font-family: var(--font-mono);
+}
+
+.rank-value {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.rank-align-right {
+  text-align: right;
+}
+
+.rank-row .rank-value {
+  text-align: right;
+}
+
+/* ---------------------------------------------------------
+   Responsive
+   --------------------------------------------------------- */
+
+@media (max-width: 900px) {
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .page-header {
+    flex-wrap: wrap;
+  }
+}
