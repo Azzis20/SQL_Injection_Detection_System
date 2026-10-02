@@ -124,15 +124,14 @@
         </div>
 
         <div class="forensic-footer">
-            {% comment %} <button type="button" class="btn-outline" id="mark-false-positive-btn">
-                <span>&#10003;</span>
-                Mark as False Positive
-            </button> {% endcomment %}
-            <form method="post" action="{% url 'attack_logs:block_source_ip' log.id %}">
+           
+            <form method="post" action="{% url 'attack_logs:block_source_ip' log.id %}"
+                  onsubmit="return confirm('Block source IP {{ log.source_ip|escapejs }}?');">
                 {% csrf_token %}
-                <button type="submit" class="btn-danger" id="add-ip-blocklist-btn">
+                <button type="submit" class="btn-danger" id="add-ip-blocklist-btn"
+                        {% if is_source_ip_blocked %}disabled aria-disabled="true" title="This IP address is already blocked."{% endif %}>
                     <span>&#128683;</span>
-                    Add IP to Blocklist
+                    {% if is_source_ip_blocked %}IP Already Blocked{% else %}Add IP to Blocklist{% endif %}
                 </button>
             </form>
         </div>

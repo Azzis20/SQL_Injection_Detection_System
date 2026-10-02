@@ -83,9 +83,9 @@ def attack_logs(request):
 
     delta = DATE_RANGES[range_key][1]
     if delta is not None:
-        # Use timezone.localtime(timezone.now()) if working with local DB timestamps
-        cutoff = timezone.now() - delta
-        logs = logs.filter(timestamp__gte=cutoff)
+        now = timezone.now()
+        cutoff = now - delta
+        logs = logs.filter(timestamp__gte=cutoff, timestamp__lte=now)
         
     if risk:
         logs = logs.filter(risk_level=risk)
@@ -150,7 +150,15 @@ def attack_logs(request):
 @login_required
 def attack_log_detail(request, log_id):
     log = get_object_or_404(RequestLog, id=log_id)
-    return render(request, "attack_logs/view.html", {"log": log})
+    is_source_ip_blocked = BlockedIP.objects.filter(
+        ip_address=log.source_ip,
+        is_active=True,
+    ).exists()
+    return render(
+        request,
+        "attack_logs/view.html",
+        {"log": log, "is_source_ip_blocked": is_source_ip_blocked},
+    )
 
 
 @login_required
