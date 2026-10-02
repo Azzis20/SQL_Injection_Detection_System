@@ -125,8 +125,7 @@
 
         <div class="forensic-footer">
            
-            <form method="post" action="{% url 'attack_logs:block_source_ip' log.id %}"
-                  onsubmit="return confirm('Block source IP {{ log.source_ip|escapejs }}?');">
+            <form method="post" action="{% url 'attack_logs:block_source_ip' log.id %}" id="block-source-ip-form">
                 {% csrf_token %}
                 <button type="submit" class="btn-danger" id="add-ip-blocklist-btn"
                         {% if is_source_ip_blocked %}disabled aria-disabled="true" title="This IP address is already blocked."{% endif %}>
@@ -137,5 +136,62 @@
         </div>
 
     </div>
+
+    {% if not is_source_ip_blocked %}
+    <div class="block-confirm-overlay" id="block-ip-confirm-overlay" aria-hidden="true">
+        <section class="block-confirm-modal" role="dialog" aria-modal="true"
+                 aria-labelledby="block-ip-confirm-title" aria-describedby="block-ip-confirm-message">
+            <div class="block-confirm-icon" aria-hidden="true">&#9888;</div>
+            <p class="block-confirm-eyebrow">SECURITY ACTION</p>
+            <h2 class="block-confirm-title" id="block-ip-confirm-title">Block this IP address?</h2>
+            <p class="block-confirm-message" id="block-ip-confirm-message">
+                This will add <strong>{{ log.source_ip }}</strong> to the blocklist and restrict its access.
+            </p>
+            <div class="block-confirm-actions">
+                <button type="button" class="block-confirm-cancel" id="cancel-block-ip">Cancel</button>
+                <button type="button" class="block-confirm-submit" id="confirm-block-ip">
+                    <span>&#128683;</span> Block IP
+                </button>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        (function () {
+            const form = document.getElementById("block-source-ip-form");
+            const trigger = document.getElementById("add-ip-blocklist-btn");
+            const overlay = document.getElementById("block-ip-confirm-overlay");
+            const cancelButton = document.getElementById("cancel-block-ip");
+            const confirmButton = document.getElementById("confirm-block-ip");
+
+            if (!form || !trigger || !overlay) return;
+
+            function closeModal() {
+                overlay.classList.remove("open");
+                overlay.setAttribute("aria-hidden", "true");
+                trigger.focus();
+            }
+
+            trigger.addEventListener("click", function (event) {
+                event.preventDefault();
+                overlay.classList.add("open");
+                overlay.setAttribute("aria-hidden", "false");
+                cancelButton.focus();
+            });
+
+            cancelButton.addEventListener("click", closeModal);
+            overlay.addEventListener("click", function (event) {
+                if (event.target === overlay) closeModal();
+            });
+            document.addEventListener("keydown", function (event) {
+                if (event.key === "Escape" && overlay.classList.contains("open")) closeModal();
+            });
+            confirmButton.addEventListener("click", function () {
+                confirmButton.disabled = true;
+                form.submit();
+            });
+        })();
+    </script>
+    {% endif %}
 
 {% endblock %}
