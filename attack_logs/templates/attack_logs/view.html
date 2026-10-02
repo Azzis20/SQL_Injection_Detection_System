@@ -7,6 +7,8 @@
 
 {% block style %}
     <link rel="stylesheet" type="text/css" href="{% static 'css/attack-logs.css' %}">
+    
+    {% comment %} <script src="{% static 'script/dashboard.js' %}"></script> {% endcomment %}
 {% endblock %}
 
 {% block content %}
@@ -136,62 +138,30 @@
         </div>
 
     </div>
+        {% if not is_source_ip_blocked %}
+        <!-- Form wrapper required by the JS file -->
+        <form id="block-source-ip-form" action="{% url 'your_block_ip_url_name' %}" method="POST">
+            {% csrf_token %}
+            <input type="hidden" name="source_ip" value="{{ log.source_ip }}">
 
-    {% if not is_source_ip_blocked %}
-    <div class="block-confirm-overlay" id="block-ip-confirm-overlay" aria-hidden="true">
-        <section class="block-confirm-modal" role="dialog" aria-modal="true"
-                 aria-labelledby="block-ip-confirm-title" aria-describedby="block-ip-confirm-message">
-            <div class="block-confirm-icon" aria-hidden="true">&#9888;</div>
-            <p class="block-confirm-eyebrow">SECURITY ACTION</p>
-            <h2 class="block-confirm-title" id="block-ip-confirm-title">Block this IP address?</h2>
-            <p class="block-confirm-message" id="block-ip-confirm-message">
-                This will add <strong>{{ log.source_ip }}</strong> to the blocklist and restrict its access.
-            </p>
-            <div class="block-confirm-actions">
-                <button type="button" class="block-confirm-cancel" id="cancel-block-ip">Cancel</button>
-                <button type="button" class="block-confirm-submit" id="confirm-block-ip">
-                    <span>&#128683;</span> Block IP
-                </button>
+            <div class="block-confirm-overlay" id="block-ip-confirm-overlay" aria-hidden="true">
+                <section class="block-confirm-modal" role="dialog" aria-modal="true"
+                        aria-labelledby="block-ip-confirm-title" aria-describedby="block-ip-confirm-message">
+                    <div class="block-confirm-icon" aria-hidden="true">&#9888;</div>
+                    <p class="block-confirm-eyebrow">SECURITY ACTION</p>
+                    <h2 class="block-confirm-title" id="block-ip-confirm-title">Block this IP address?</h2>
+                    <p class="block-confirm-message" id="block-ip-confirm-message">
+                        This will add <strong>{{ log.source_ip }}</strong> to the blocklist and restrict its access.
+                    </p>
+                    <div class="block-confirm-actions">
+                        <button type="button" class="block-confirm-cancel" id="cancel-block-ip">Cancel</button>
+                        <button type="button" class="block-confirm-submit" id="confirm-block-ip">
+                            <span>&#128683;</span> Block IP
+                        </button>
+                    </div>
+                </section>
             </div>
-        </section>
-    </div>
-
-    <script>
-        (function () {
-            const form = document.getElementById("block-source-ip-form");
-            const trigger = document.getElementById("add-ip-blocklist-btn");
-            const overlay = document.getElementById("block-ip-confirm-overlay");
-            const cancelButton = document.getElementById("cancel-block-ip");
-            const confirmButton = document.getElementById("confirm-block-ip");
-
-            if (!form || !trigger || !overlay) return;
-
-            function closeModal() {
-                overlay.classList.remove("open");
-                overlay.setAttribute("aria-hidden", "true");
-                trigger.focus();
-            }
-
-            trigger.addEventListener("click", function (event) {
-                event.preventDefault();
-                overlay.classList.add("open");
-                overlay.setAttribute("aria-hidden", "false");
-                cancelButton.focus();
-            });
-
-            cancelButton.addEventListener("click", closeModal);
-            overlay.addEventListener("click", function (event) {
-                if (event.target === overlay) closeModal();
-            });
-            document.addEventListener("keydown", function (event) {
-                if (event.key === "Escape" && overlay.classList.contains("open")) closeModal();
-            });
-            confirmButton.addEventListener("click", function () {
-                confirmButton.disabled = true;
-                form.submit();
-            });
-        })();
-    </script>
-    {% endif %}
+        </form>
+        {% endif %}
 
 {% endblock %}
