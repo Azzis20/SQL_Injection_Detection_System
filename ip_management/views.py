@@ -4,9 +4,14 @@ from django.contrib import messages
 from django.core.paginator import Paginator
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.http import require_POST
 from django.shortcuts import get_object_or_404, redirect, render
 from .models import BlockedIP, WhitelistedIP
 from django.db.models import Q
+from django.views.decorators.http import require_POST
+
+
+
 
 
 def search_ip_management(request, blocked, whitelisted):
@@ -121,17 +126,20 @@ def check_ip_blocked(request):
     return JsonResponse({"blocked": is_blocked, "valid": True})
 
 
-# from django.utils import timezone
+@login_required
+@require_POST
+def unblock_ip(request, pk):
+    """Deactivate a blocklist entry while preserving its history."""
+    entry = get_object_or_404(BlockedIP, pk=pk)
 
-# def unblock_ip(request, pk):
-#     """Deactivates a blocked IP entry rather than deleting it, preserving history."""
-#     entry = get_object_or_404(BlockedIP, pk=pk)
+    if entry.is_active:
+        from django.utils import timezone
 
-#     if request.method == "POST":
-#         entry.is_active = False
-#         entry.date_unblocked = timezone.now()
-#         entry.save()
-#         messages.success(request, f"IP address {entry.ip_address} has been unblocked.")
-#         return redirect("ip_management:index")
+        entry.is_active = False
+        entry.date_unblocked = timezone.now()
+        entry.save(update_fields=["is_active", "date_unblocked"])
+        messages.success(request, f"IP address {entry.ip_address} has been unblocked.")
+    else:
+        messages.info(request, f"IP address {entry.ip_address} is already unblocked.")
 
-#     return render(request, "ip_management/confirm_unblock.html", {"entry": entry})
+    return redirect("ip_management:view_blocked_ip", pk=entry.pk)

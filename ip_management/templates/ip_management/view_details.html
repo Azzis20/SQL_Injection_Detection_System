@@ -44,10 +44,11 @@
             <textarea rows="4" readonly>{{ entry.reason }}</textarea>
         </div>
 
-        <div class="form-group view-meta">
+        {% comment %} <div class="form-group view-meta">
             <div class="form-label-row"><label>ATTEMPT COUNT</label></div>
             <p class="view-meta-value">{{ entry.attempt_count }}</p>
-        </div>
+        </div> {% endcomment %}
+
 
         <div class="form-group view-meta">
             <div class="form-label-row"><label>DATE ADDED</label></div>
@@ -61,12 +62,14 @@
             </p>
         </div>
 
-        {% comment %} <div class="form-footer">
-            <a href="{% url 'ip_management:index' %}" class="btn btn-secondary">Close</a>
-            <button type="button" class="btn btn-primary action-link-unblock" data-ip-id="{{ entry.id }}">
-                <span class="btn-icon">&#128274;</span> Unblock IP Address
-            </button>
-        </div> {% endcomment %}
+        {% comment %} Add unblock IP button functionality here {% endcomment %}
+        {% if entry.is_active %}
+            <form method="post" action="{% url 'ip_management:unblock_ip' entry.pk %}" class="form-footer">
+                {% csrf_token %}
+                <a href="{% url 'ip_management:index' %}" class="btn btn-secondary">Back to IP Management</a>
+                <button type="submit" class="btn btn-primary">Unblock IP Address</button>
+            </form>
+        {% endif %}
 
     </div>
 </div>
