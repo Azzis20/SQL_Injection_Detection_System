@@ -152,3 +152,8 @@ MAILERS = {
         'BACKEND': 'django.core.mail.backends.console.EmailBackend',
     },
 }
+
+WHITENOISE_KEEP_ONLY_HASHED_FILES = True
+# Disable compression temporarily
+WHITENOISE_AUTOREFRESH = False
+WHITENOISE_USE_FINDERS = False
