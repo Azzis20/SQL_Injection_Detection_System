@@ -6,9 +6,9 @@ from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST
 from django.shortcuts import get_object_or_404, redirect, render
+from django.utils import timezone
 from .models import BlockedIP, WhitelistedIP
 from django.db.models import Q
-from django.views.decorators.http import require_POST
 
 
 
@@ -94,10 +94,15 @@ def block_ip(request):
                 {"ip_address": ip_address, "reason": reason},
             )
 
-        BlockedIP.objects.create(
+        BlockedIP.objects.update_or_create(
             ip_address=ip_address,
-            reason=reason,
-            added_by=request.user if request.user.is_authenticated else None,
+            defaults={
+                "reason": reason,
+                "added_by": request.user if request.user.is_authenticated else None,
+                "is_active": True,
+                "date_added": timezone.now(),
+                "date_unblocked": None,
+            },
         )
         messages.success(request, f"IP address {ip_address} has been blocked.")
         return redirect("ip_management:index")
@@ -133,8 +138,6 @@ def unblock_ip(request, pk):
     entry = get_object_or_404(BlockedIP, pk=pk)
 
     if entry.is_active:
-        from django.utils import timezone
-
         entry.is_active = False
         entry.date_unblocked = timezone.now()
         entry.save(update_fields=["is_active", "date_unblocked"])
