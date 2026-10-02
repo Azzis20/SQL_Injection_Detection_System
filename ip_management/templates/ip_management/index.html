@@ -58,7 +58,7 @@
                     <th>IP Address</th>
                     <th>Reason Blocked</th>
                     <th>Date Added</th>
-                    <th>Attempts</th>
+                    <th>Status</th>
                     <th>Actions</th>
                 </tr>
             </thead>
@@ -73,17 +73,15 @@
                         </div>
                     </td>
                     <td>{{ entry.date_added }}</td>
-                    <td class="cell-attempts">{{ entry.attempt_count }}</td>
+                    <td class="cell-status">
+                        {% if entry.is_active %}Blocked IP{% else %}Allowed IP{% endif %}
+                    </td>
                     <td>
                         <div class="actions-cell">
                             <a href="{% url 'ip_management:view_blocked_ip' entry.id %}" class="action-link action-link-view">
                                 <span class="action-link-icon">&#128065;</span>
                                 View
                             </a>
-                            {% comment %} <button type="button" class="action-link action-link-unblock" data-ip-id="{{ entry.id }}">
-                                <span class="action-link-icon">&#128274;</span>
-                                Unblock
-                            </button> {% endcomment %}
                         </div>
                     </td>
                 </tr>
