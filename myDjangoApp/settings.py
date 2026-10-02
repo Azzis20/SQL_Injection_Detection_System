@@ -41,7 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'whitenoise.middleware.WhiteNoiseMiddleware',
+    
     # "django.contrib.auth.backends.ModelBackend",
     'accounts',
     'dashboard',
@@ -61,6 +61,7 @@ LOGOUT_REDIRECT_URL = "accounts:login"
 MIDDLEWARE = [
    
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
