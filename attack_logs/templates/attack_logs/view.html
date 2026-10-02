@@ -128,10 +128,13 @@
                 <span>&#10003;</span>
                 Mark as False Positive
             </button> {% endcomment %}
-            <button type="button" class="btn-danger" id="add-ip-blocklist-btn">
-                <span>&#128683;</span>
-                Add IP to Blocklist
-            </button>
+            <form method="post" action="{% url 'attack_logs:block_source_ip' log.id %}">
+                {% csrf_token %}
+                <button type="submit" class="btn-danger" id="add-ip-blocklist-btn">
+                    <span>&#128683;</span>
+                    Add IP to Blocklist
+                </button>
+            </form>
         </div>
 
     </div>

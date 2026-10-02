@@ -1,11 +1,14 @@
 
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 from django.core.paginator import Paginator
 from django.db.models import Q
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404, redirect, render
 from django.utils import timezone
+from django.views.decorators.http import require_POST
 from datetime import timedelta
 
+from ip_management.models import BlockedIP
 from .models import RequestLog
 
 DATE_RANGES = {
@@ -148,3 +151,28 @@ def attack_logs(request):
 def attack_log_detail(request, log_id):
     log = get_object_or_404(RequestLog, id=log_id)
     return render(request, "attack_logs/view.html", {"log": log})
+
+
+@login_required
+@require_POST
+def block_log_source_ip(request, log_id):
+    """Block the source IP recorded for an attack log."""
+    log = get_object_or_404(RequestLog, id=log_id)
+    existing_entry = BlockedIP.objects.filter(ip_address=log.source_ip).first()
+
+    if existing_entry and existing_entry.is_active:
+        messages.info(request, f"IP address {log.source_ip} is already blocked.")
+    else:
+        BlockedIP.objects.update_or_create(
+            ip_address=log.source_ip,
+            defaults={
+                "reason": f"Blocked from attack log #{log.pk} ({log.risk_level} risk)",
+                "added_by": request.user,
+                "is_active": True,
+                "date_added": timezone.now(),
+                "date_unblocked": None,
+            },
+        )
+        messages.success(request, f"IP address {log.source_ip} has been blocked.")
+
+    return redirect("attack_logs:detail", log_id=log.pk)
