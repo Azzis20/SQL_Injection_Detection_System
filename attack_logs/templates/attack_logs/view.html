@@ -8,7 +8,7 @@
 {% block style %}
     <link rel="stylesheet" type="text/css" href="{% static 'css/attack-logs.css' %}">
     
-    <script src="{% static 'script/attack-logs.js' %}" defer></script>
+    {% comment %} <script src="{% static 'script/attack-logs.js' %}" defer></script> {% endcomment %}
 {% endblock %}
 
 {% block content %}
@@ -126,24 +126,14 @@
         </div>
 
         <div class="forensic-footer">
-           
             <form method="post" action="{% url 'attack_logs:block_source_ip' log.id %}" id="block-source-ip-form">
                 {% csrf_token %}
-                <button type="submit" class="btn-danger" id="add-ip-blocklist-btn"
+                <button type="button" class="btn-danger" id="add-ip-blocklist-btn"
                         {% if is_source_ip_blocked %}disabled aria-disabled="true" title="This IP address is already blocked."{% endif %}>
                     <span>&#128683;</span>
                     {% if is_source_ip_blocked %}IP Already Blocked{% else %}Add IP to Blocklist{% endif %}
                 </button>
-            </form>
-        </div>
-
-    </div>
         {% if not is_source_ip_blocked %}
-        <!-- Form wrapper required by the JS file -->
-        <form id="block-source-ip-form" action="{% url 'your_block_ip_url_name' %}" method="POST">
-            {% csrf_token %}
-            <input type="hidden" name="source_ip" value="{{ log.source_ip }}">
-
             <div class="block-confirm-overlay" id="block-ip-confirm-overlay" aria-hidden="true">
                 <section class="block-confirm-modal" role="dialog" aria-modal="true"
                         aria-labelledby="block-ip-confirm-title" aria-describedby="block-ip-confirm-message">
@@ -155,13 +145,46 @@
                     </p>
                     <div class="block-confirm-actions">
                         <button type="button" class="block-confirm-cancel" id="cancel-block-ip">Cancel</button>
-                        <button type="button" class="block-confirm-submit" id="confirm-block-ip">
+                        <button type="submit" class="block-confirm-submit" id="confirm-block-ip">
                             <span>&#128683;</span> Block IP
                         </button>
                     </div>
                 </section>
             </div>
-        </form>
         {% endif %}
+            </form>
+        </div>
+
+    </div>
+
+    {% if not is_source_ip_blocked %}
+    <script>
+        (function () {
+            const trigger = document.getElementById("add-ip-blocklist-btn");
+            const overlay = document.getElementById("block-ip-confirm-overlay");
+            const cancelButton = document.getElementById("cancel-block-ip");
+            if (!trigger || !overlay || !cancelButton) return;
+
+            function closeModal() {
+                overlay.classList.remove("open");
+                overlay.setAttribute("aria-hidden", "true");
+                trigger.focus();
+            }
+
+            trigger.addEventListener("click", function () {
+                overlay.classList.add("open");
+                overlay.setAttribute("aria-hidden", "false");
+                cancelButton.focus();
+            });
+            cancelButton.addEventListener("click", closeModal);
+            overlay.addEventListener("click", function (event) {
+                if (event.target === overlay) closeModal();
+            });
+            document.addEventListener("keydown", function (event) {
+                if (event.key === "Escape" && overlay.classList.contains("open")) closeModal();
+            });
+        })();
+    </script>
+    {% endif %}
 
 {% endblock %}
