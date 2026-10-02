@@ -115,8 +115,9 @@ def forward_to_target(request, full_path):
             data=request.body,
             headers={
                 k: v for k, v in request.headers.items()
-                if k.lower() not in ("host", "content-length")
+                if k.lower() not in ("host", "content-length", "accept-encoding")   # ← is this present?
             },
+            
             cookies=request.COOKIES,
             allow_redirects=False,
             timeout=(3.0, 10.0),  # (connect timeout, read timeout)
